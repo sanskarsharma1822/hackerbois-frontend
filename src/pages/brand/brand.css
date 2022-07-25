@@ -1,0 +1,37 @@
+/*.root{
+    min-height:100%;
+    min-width: 100%;
+}*/
+.warehouse{
+    display: flex;
+    flex-direction: column;
+    margin: 1.5%;
+}
+
+.warehouse .head {
+    display: flex;
+justify-content: center;
+}
+
+.head div{
+    align-content: flex-end;
+}
+
+.warehouse .cards-outer{
+    text-align: center;
+}
+
+.warehouse .cards{
+    width: 100%;
+    display: inline-block;
+    text-align: left;
+    justify-content:  space-evenly;
+    flex-wrap: wrap;
+}
+
+.warehouse .cards > *{
+    display: inline-block;
+    border: none;
+    margin: 1%;
+    color: black;
+}

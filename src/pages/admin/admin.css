@@ -1,0 +1,19 @@
+.landingAdmin {
+    align-items: center;
+    height: 100% !important;
+}
+.landingAdmin h1{
+    text-align: center;
+    font-style: italic;
+    font-weight: bold;;
+}
+/*.table-container{
+    /*background: rgb(21,7,149);
+    background: linear-gradient(90deg, rgba(21,7,149,0.9756945014333859) 0%, rgba(45,252,253,1) 100%);
+    background: linear-gradient(30deg, rgba(126,9,172,0.9756945014333859) 0%, rgba(33,154,236,1) 100%);
+
+}*/
+
+th, td{
+    color:white;
+}
