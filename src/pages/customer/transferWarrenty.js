@@ -1,60 +1,66 @@
-
-import React from 'react'
-import { useState, useEffect, useRef } from 'react';
-import '../../forms/register.css';
-import axios from '../../api/axios.js';
+import React from "react";
+import { useState, useEffect, useRef } from "react";
+import "../../forms/register.css";
+import storeOwnerHistory from "../../backendScripts/storeOwnerHistory";
+import axios from "../../api/axios.js";
 
 function Transfer() {
-
   const userRef = useRef();
   const errRef = useRef();
 
-  const [newAdd, setNewAdd] = useState('');
+  const [newAdd, setNewAdd] = useState("");
   const [newAddFocus, setNewAddFocus] = useState(false);
 
-  const [contact, setContact] = useState('');
+  const [contact, setContact] = useState("");
   const [ContactFocus, setContactFocus] = useState(false);
 
-  const [errMsg, setErrMsg] = useState('');
+  const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const response=false; //dummy variable
+  //-----------------------------------------------------------
+  const [ipfsReturn, setIpfsReturn] = useState();
+  const ipfsURL = "";
+  //-----------------------------------------------------------
+
+  const response = false; //dummy variable
 
   useEffect(() => {
     userRef.current.focus();
-  }, [])
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        if(response==false){
-            alert("Transfer was not a  :(");
-        }
-        else if(response==true){
-            alert("Transfer was a Success :)");
-            setSuccess(true);
-        }
-      setNewAdd('');
-      setContact('');
+      if (response == false) {
+        alert("Transfer was not a  :(");
+      } else if (response == true) {
+        alert("Transfer was a Success :)");
+        setSuccess(true);
+      }
+      setNewAdd("");
+      setContact("");
     } catch (err) {
       /*if any error in actual res*/
       errRef.current.focus();
     }
-  }
+  };
 
   return (
     <div classsName="registerContainer">
-
       {success ? (
         <h1>transferred</h1>
       ) : (
         <section>
-          <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+          <p
+            ref={errRef}
+            className={errMsg ? "errmsg" : "offscreen"}
+            aria-live="assertive"
+          >
+            {errMsg}
+          </p>
           <h1>New Owner</h1>
           <form onSubmit={handleSubmit}>
-            <label htmlFor="add">
-              New Owner Address:
-            </label>
+            <label htmlFor="add">New Owner Address:</label>
             <input
               type="text"
               id="add"
@@ -68,9 +74,7 @@ function Transfer() {
               onFocus={() => setNewAddFocus(true)}
               onBlur={() => setNewAddFocus(false)}
             />
-            <label htmlFor="contact">
-              Contact No.:
-            </label>
+            <label htmlFor="contact">Contact No.:</label>
             <input
               type="number"
               id="contact"
@@ -84,17 +88,28 @@ function Transfer() {
               onFocus={() => setContactFocus(true)}
               onBlur={() => setContactFocus(false)}
             />
-            <button disabled={!contact || !newAdd ? true : false} >Transfer</button>
+            <button
+              disabled={!contact || !newAdd ? true : false}
+              onClick={async () => {
+                const tempArr = storeOwnerHistory(ipfsURL, newAdd);
+                setIpfsReturn(tempArr);
+                // console.log(ipfsReturn);
+              }}
+            >
+              Transfer
+            </button>
           </form>
           <p>
-            Already registered?<br />
+            Already registered?
+            <br />
             <span className="line">
               {/*put router link here*/}
               <a href="#">Sign In</a>
             </span>
           </p>
         </section>
-      )}</div>
+      )}
+    </div>
   );
 }
 

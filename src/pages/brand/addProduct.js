@@ -11,7 +11,6 @@ import "../customer/customer.css";
 import storeData from "../../backendScripts/storeToken";
 import axios from "../../api/axios.js";
 // import storeData from "../../backendScripts/storeToken";
-import console from "console-browserify";
 
 const NAME_REGEX = /^[a-zA-Z0-9_.-]*$/;
 const PRICE_REGEX = /^[0-9]{1,45}$/;
