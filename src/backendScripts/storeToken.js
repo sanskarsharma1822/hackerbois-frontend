@@ -1,4 +1,5 @@
 import Moralis from "moralis";
+import console from "console-browserify";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -40,7 +41,7 @@ async function storeData(
 }
 
 async function storeHistory(image) {
-  metaData = {
+  const metaData = {
     name: "History",
     image: image,
     description:
@@ -66,7 +67,7 @@ async function uploadMetaData(
   price
 ) {
   const image = uploadImage(imageData);
-  metaData = {
+  const imgMetaData = {
     name: name,
     image: image,
     serialNumber: serialNumber,
@@ -75,7 +76,7 @@ async function uploadMetaData(
     price: price,
   };
   const file = new Moralis.File("file.json", {
-    base64: btoa(JSON.stringify(metaData)),
+    base64: btoa(JSON.stringify(imgMetaData)),
   });
   await file.saveIPFS();
   console.log(file.ipfs());

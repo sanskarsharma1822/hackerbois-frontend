@@ -104,6 +104,10 @@ function Warehouse({ brandIndex }) {
 
   // Moralis.onAccountChanged(updateUI());
 
+  Moralis.onAccountChanged(() => {
+    updateUI();
+  });
+
   return (
     //add new product btn
     <div className="warehouse">
