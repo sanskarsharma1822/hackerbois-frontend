@@ -43,7 +43,8 @@ function RegisterBrand() {
   const [id, setId] = useState("");
   const [idFocus, setIdFocus] = useState(false);
 
-  const [warrenty, setWarrenty] = useState("");
+  const [warrenty, setWarrenty] = useState("1");
+  // const [warrenty, setWarrenty] = useState("");
   const [warrentyFocus, setWarrentyFocus] = useState(false);
 
   const [errMsg, setErrMsg] = useState("");
@@ -122,7 +123,10 @@ function RegisterBrand() {
     chainId in adminContractAddress ? adminContractAddress[chainId][0] : null;
 
   const [brandIndex, setBrandIndex] = useState("0");
-  const [entryFee, setEntryFee] = useState("0");
+  const [brandID, setBrandID] = useState("0");
+  // const [entryFee, setEntryFee] = useState("0");
+  const [entryFee, setEntryFee] = useState("10000000000000000");
+  const [smartContractAddress, setSmartContractAddress] = useState("");
 
   const { runContractFunction: getBrandID } = useWeb3Contract({
     abi: brandFactoryABI,
@@ -166,8 +170,11 @@ function RegisterBrand() {
     const tempIndex = await getBrandIndex({
       onError: (error) => console.log(error),
     });
+
     setBrandIndex(tempIndex.toString());
-    setId(tempBrandID.toString());
+    setBrandID(tempBrandID.toString());
+    console.log(brandID);
+    console.log(brandIndex);
   };
 
   const handleSuccess = async function (tx) {
@@ -192,14 +199,29 @@ function RegisterBrand() {
     }
   }, [isWeb3Enabled]);
 
+  useEffect(() => {
+    async function updateFee() {
+      const tempMul = (await getEntryFee()).toString();
+      const tempFee = tempMul * 0.01;
+      const tempFeeString = tempFee.toString();
+      const final = ethers.utils.parseEther(tempFeeString);
+      setEntryFee(final.toString());
+    }
+    updateFee();
+  }, [warrenty]);
+
   //-------------------------------------------------------------------------------------
 
   return (
     <div classsName="registerContainer">
       {/*if registration of product was successful -> go to warehouse */}
-      {success ? (
+      {/* brandID !== 0 && typeof brandID !== "undefined" */}
+      {brandID !== "0" && typeof brandID !== "undefined" ? (
         //<Link to='/dh'></Link>
-        <h1>registered</h1>
+        <Warehouse
+          brandIndex={brandIndex}
+          brandAddress={smartContractAddress}
+        />
       ) : (
         <section>
           <p
@@ -276,18 +298,21 @@ function RegisterBrand() {
           </select>
           <button
             disabled={!name || !email || !id || !warrenty ? true : false}
-            onClick={async (e) => {
-              const tempMul = (await getEntryFee()).toString();
-              const tempFee = tempMul * 0.01;
-              const tempFeeString = tempFee.toString();
-              const final = ethers.utils.parseEther(tempFeeString);
-              setEntryFee(final.toString());
-              e.preventDefault();
+            onClick={async () => {
+              // const tempMul = (await getEntryFee()).toString();
+              // const tempFee = tempMul * 0.01;
+              // const tempFeeString = tempFee.toString();
+              // const final = ethers.utils.parseEther(tempFeeString);
+              // setEntryFee(final.toString());
+              await deployBrandContract({
+                onSuccess: handleSuccess,
+                onError: (error) => console.log(error),
+              });
             }}
           >
-            Save Brand
+            Submit
           </button>
-          <button
+          {/* <button
             type="submit"
             onClick={async () => {
               await deployBrandContract({
@@ -297,7 +322,7 @@ function RegisterBrand() {
             }}
           >
             Submit
-          </button>
+          </button> */}
           {/* </form> */}
         </section>
       )}
