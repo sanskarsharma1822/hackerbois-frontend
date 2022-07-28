@@ -174,8 +174,8 @@ function RegisterBrand() {
 
     setBrandIndex(tempIndex.toString());
     setBrandID(tempBrandID.toString());
-    console.log(brandID);
-    console.log(brandIndex);
+    // console.log(brandID);
+    // console.log(brandIndex);
   };
 
   const handleSuccess = async function (tx) {

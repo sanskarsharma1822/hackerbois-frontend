@@ -30,17 +30,20 @@ function Warehouse({ brandIndex }) {
   const [entryFee, setEntryFee] = useState("10000000000000000");
   const [brandWarrantyLeft, setBrandWarrantyLeft] = useState("0");
   const [totalTokens, setTotalTokens] = useState("0");
-  const [currToken, setCurrToken] = useState(0);
+  const [numOfTokens, setNumOfTokens] = useState("0");
+  const [tokens, setTokens] = useState("");
+  const [i, setI] = useState(0);
+  const [finalArr, setFinalArr] = useState([]);
 
   const adminAddress =
     chainId in adminContractAddress ? adminContractAddress[chainId][0] : null;
 
-  const demoArr = [
-    "https://ipfs.moralis.io:2053/ipfs/QmeHhwna4RP3yeZPVnvy5afiE8oQWdqcSg4nk5ri2YV5rp",
-    "https://ipfs.moralis.io:2053/ipfs/QmZb67tABujYUXqpZxtq1eM68bu6heo6gsZgVGsyCn7bq6",
-    "https://ipfs.moralis.io:2053/ipfs/QmbH75rznJ2cpMxdJYUVsC8eNjxjUfNthw1WGPZDWrAcKZ",
-    "https://ipfs.moralis.io:2053/ipfs/QmZtt24dm1YYPoYkvjW2gwM1pWrxeMCwekrLGdioTeY5C9",
-  ];
+  // const demoArr = [
+  //   "https://ipfs.moralis.io:2053/ipfs/QmeHhwna4RP3yeZPVnvy5afiE8oQWdqcSg4nk5ri2YV5rp",
+  //   "https://ipfs.moralis.io:2053/ipfs/QmZb67tABujYUXqpZxtq1eM68bu6heo6gsZgVGsyCn7bq6",
+  //   "https://ipfs.moralis.io:2053/ipfs/QmbH75rznJ2cpMxdJYUVsC8eNjxjUfNthw1WGPZDWrAcKZ",
+  //   "https://ipfs.moralis.io:2053/ipfs/QmZtt24dm1YYPoYkvjW2gwM1pWrxeMCwekrLGdioTeY5C9",
+  // ];
 
   //------------------------------------------------------
 
@@ -84,28 +87,76 @@ function Warehouse({ brandIndex }) {
     params: { index: brandIndex },
   });
 
-  // const { runContractFunction: totalSupply } = useWeb3Contract({
-  //   abi: brandsABI,
-  //   contractAddress: brandAddress,
-  //   functionName: "totalSupply",
-  //   params: {},
-  // });
+  const { runContractFunction: getTotalySupply } = useWeb3Contract({
+    abi: brandsABI,
+    contractAddress: brandAddress,
+    functionName: "getTotalySupply",
+    params: {},
+  });
 
-  const updateCards = async function () {
-    while (currToken < 4) {
-      console.log(currToken);
-      setCurrToken(currToken++);
+  const { runContractFunction: viewTokenURI } = useWeb3Contract({
+    abi: brandsABI,
+    contractAddress: brandAddress,
+    functionName: "viewTokenURI",
+    params: { _tokenId: i - 1 },
+  });
+
+  const updateNumberOfTokens = async function () {
+    console.log("Updating no of tokens");
+    const tempNumberOfTokens = await getTotalySupply({
+      onError: (error) => console.log(error),
+    });
+    setNumOfTokens(tempNumberOfTokens.toString());
+  };
+
+  const tokensCondition = () => {
+    if (i < numOfTokens) {
+      setI(i + 1);
     }
   };
 
-  const [temp, setTemp] = useState("0");
+  const updateURI = async function () {
+    const tempURI = await viewTokenURI({
+      onError: (error) => console.log(error),
+    });
+    // console.log(tempURI);
+    const { data } = await axios.get(`${tempURI}`);
+    const { name, image, serialNumber, productLink, description, price } = data;
+    const tempObj = {
+      tokenId: i - 1,
+      name: name,
+      image: image,
+      serialNumber: serialNumber,
+      productLink: productLink,
+      description: description,
+      price: price,
+    };
+    setFinalArr((oldArr) => [...oldArr, tempObj]);
+  };
+
+  useEffect(() => {
+    // console.log("this is i : " + i);
+    if (brandAddress !== "") {
+      updateURI();
+    }
+    tokensCondition();
+  }, [i]);
+
+  useEffect(() => {
+    // console.log("hello ji" + " " + numOfTokens);
+    tokensCondition();
+  }, [numOfTokens]);
+
+  useEffect(() => {
+    if (brandAddress !== "") {
+      updateNumberOfTokens();
+    }
+  }, [brandAddress]);
+
   const updateUI = async function () {
-    const tempBrandAddress = (await getBrandSmartContractAddress()).toString();
     const tempBrandWarrantyLeft = (await getBrandWarrantyLeft()).toString();
     // const tempSupply = (await totalSupply()).toString();
     setBrandWarrantyLeft(tempBrandWarrantyLeft);
-    setBrandAddress(tempBrandAddress);
-    setTemp("1");
     // setTotalTokens(tempSupply);
     // if(totalTokens>0){
     //   updateCards();
@@ -117,15 +168,6 @@ function Warehouse({ brandIndex }) {
     // }
     // console.log(tempAdd);
   };
-
-  useEffect(() => {
-    if (temp == "1") {
-      // while (currToken < 5) {
-      //   console.log(currToken);
-      //   setCurrToken(currToken + 1);
-      // }
-    }
-  }, [temp]);
 
   useEffect(() => {
     if (isWeb3Enabled) {
@@ -147,6 +189,18 @@ function Warehouse({ brandIndex }) {
   }, [warrantyAdded]);
 
   useEffect(() => {
+    async function updateAddress() {
+      const tempBrandAddress = (
+        await getBrandSmartContractAddress()
+      ).toString();
+      setBrandAddress(tempBrandAddress);
+    }
+    if (brandIndex !== "0") {
+      updateAddress();
+    }
+  }, [brandIndex]);
+
+  useEffect(() => {
     Moralis.onAccountChanged((account) => {
       // console.log(`Account changed to ${account}`)
       // if (account == null) {
@@ -163,7 +217,9 @@ function Warehouse({ brandIndex }) {
     <div className="warehouse">
       {/* {console.log(brandIndex)} */}
       {/* {console.log(brandAddress)} */}
-
+      {/* {console.log(numOfTokens)} */}
+      {/* {console.log(finalArr)} */}
+      {/* {console.log(numOfTokens)} */}
       <section className="head">
         <h1>Welcome to Warehouse</h1>
         <div>
@@ -202,12 +258,31 @@ function Warehouse({ brandIndex }) {
       <section>
         {showForm ? (
           // <AddProduct brandIndex={brandIndex} />
-          <AddProduct brandIndex={0} />
+          <AddProduct
+            brandIndex={brandIndex}
+            brandAddress={brandAddress}
+            updateTokenCount={updateNumberOfTokens}
+          />
         ) : (
           <h3>Your Products</h3>
         )}
         <div className="cards-outer">
           <section className="cards">
+            {numOfTokens !== "0" &&
+              finalArr.length !== 0 &&
+              finalArr.map((one) => {
+                return (
+                  <Product
+                    key={one.tokenId}
+                    title={one.name}
+                    imgURL={one.image}
+                    text={one.description}
+                  />
+                );
+              })}
+          </section>
+        </div>
+        {/* <section className="cards">
             <Product
               key={1}
               title={"title"}
@@ -249,7 +324,24 @@ function Warehouse({ brandIndex }) {
               text={"text"}
             />
           </section>
-        </div>
+          <div> */}
+        {/* <h1>Cards</h1>
+            {numOfTokens !== "0" &&
+              finalArr.length !== 0 &&
+              finalArr.map((one) => {
+                // console.log(one);
+                // console.log(one);
+                return (
+                  <Product
+                    key={one.serialNumber}
+                    title={one.name}
+                    imgURL={one.image}
+                    text={one.description}
+                  />
+                );
+              })} */}
+        {/* </div> */}
+        {/* </div> */}
       </section>
     </div>
   );
