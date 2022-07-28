@@ -81,7 +81,7 @@ function RegisterBrand() {
             return;
         }*/
     try {
-      // setSuccess(true);
+      setSuccess(true);
       /*const response = await axios.post(REGISTER_URL,
                 JSON.stringify({ name: name, price: price, descp: descp, imgURL:imgURL, serialNo: serialNo, prodLink:prodLink, tokenId:tokenId}), //backend expects: state name here
                 {
@@ -213,15 +213,12 @@ function RegisterBrand() {
   //-------------------------------------------------------------------------------------
 
   return (
-    <div classsName="registerContainer">
+    <div classsName="regContainer">
       {/*if registration of product was successful -> go to warehouse */}
       {/* brandID !== 0 && typeof brandID !== "undefined" */}
       {brandID !== "0" && typeof brandID !== "undefined" ? (
         //<Link to='/dh'></Link>
-        <Warehouse
-          brandIndex={brandIndex}
-          brandAddress={smartContractAddress}
-        />
+        <Warehouse brandIndex={brandIndex} />
       ) : (
         <section>
           <p

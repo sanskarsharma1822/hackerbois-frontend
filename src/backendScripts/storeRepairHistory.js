@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import Moralis from "moralis";
-import dotenv from "dotenv";
-dotenv.config();
+// import dotenv from "dotenv";
+// dotenv.config();
 
 async function uploadMetaData(
   name,
@@ -10,14 +10,19 @@ async function uploadMetaData(
   ownerHistory,
   newRepairHistory
 ) {
-  const serverUrl = process.env.SERVER_URL;
-  const appId = process.env.APP_ID;
-  const masterKey = process.env.MASTER_KEY;
+  // MORALIS VARIABLES TO BE STORED IN ENV
+
+  // const serverUrl = process.env.SERVER_URL;
+  // const appId = process.env.APP_ID;s
+  // const masterKey = process.env.MASTER_KEY;
+
   Moralis.start({ serverUrl, appId, masterKey });
 
-  const web3 = await Moralis.Web3.enable();
-  const chainIdDec = await web3.eth.getChainId();
-  await Moralis.enableWeb3({ chainId: chainIdDec });
+  await Moralis.enableWeb3({ chainId: 31337 });
+
+  // const web3 = await Moralis.Web3.enable();
+  // const chainIdDec = await web3.eth.getChainId();
+  // await Moralis.enableWeb3({ chainId: chainIdDec });
 
   const metaData = {
     name: name,

@@ -4,6 +4,16 @@ import "./customer.css";
 import storeRepairHistory from "../../backendScripts/storeRepairHistory";
 import axios from "../../api/axios.js";
 
+//------------------------------------------------------------------------------------
+import { useMoralis, useWeb3Contract } from "react-moralis";
+import { brandsABI } from "../../constants/Brands/brandsConstant";
+import {
+  adminABI,
+  adminContractAddress,
+} from "../../constants/Admin/adminConstants";
+
+//------------------------------------------------------------------------------------
+
 function ClaimWarrenty() {
   const userRef = useRef();
   const errRef = useRef();
@@ -20,6 +30,35 @@ function ClaimWarrenty() {
   const ipfsURL = "";
   //-----------------------------------------------------------
 
+  //----------------------------------------------------
+  const { isWeb3Enabled, account, chainId: chainIdHex } = useMoralis();
+  const chainId = parseInt(chainIdHex);
+  const [brandAddress, setBrandAddress] = useState("");
+  const adminAddress =
+    chainId in adminContractAddress ? adminContractAddress[chainId][0] : null;
+
+  const brandIndex = 0;
+  const { runContractFunction: getBrandSmartContractAddress } = useWeb3Contract(
+    {
+      abi: adminABI,
+      contractAddress: adminAddress,
+      functionName: "getBrandSmartContractAddress",
+      params: { index: brandIndex },
+    }
+  );
+
+  const updateUI = async function () {
+    const tempBrandAddress = (await getBrandSmartContractAddress()).toString();
+    setBrandAddress(tempBrandAddress);
+    // console.log(tempAdd);
+  };
+
+  useEffect(() => {
+    if (isWeb3Enabled) {
+      updateUI();
+    }
+  }, [isWeb3Enabled]);
+  //-----------------------------------------------------
   useEffect(() => {
     userRef.current.focus();
   }, []);

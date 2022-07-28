@@ -1,8 +1,7 @@
-
-import React from 'react'
-import { useState, useEffect, useRef } from 'react';
-import ViewProduct from './viewProduct.js';
-import './customer.css';
+import React from "react";
+import { useState, useEffect, useRef } from "react";
+import ViewProduct from "./viewProduct.js";
+import "./customer.css";
 
 function Customer() {
   const actualAccountOwner = "0x726fA710e16d31b0Db81741fc1e97b70234a779a";
@@ -12,32 +11,32 @@ function Customer() {
   const userRef = useRef();
   const errRef = useRef();
 
-  const [brandId, setBrandId] = useState('');
+  const [brandId, setBrandId] = useState("");
   const [BrandIdFocus, setBrandIdFocus] = useState(false);
 
-  const [productId, setProductId] = useState('');
+  const [productId, setProductId] = useState("");
   const [productIdFocus, setProductIdFocus] = useState(false);
 
-  const [errMsg, setErrMsg] = useState('');
+  const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     userRef.current.focus();
-  }, [])
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       //get response  (actual owner address and warrenty period)
-      if (actualAccountOwner != currentAccount) { alert("You are not the owner"); }
-      else if (inWarrenty == false) {
-        alert("You are the Owner! But Warrenty has expired")
+      if (actualAccountOwner != currentAccount) {
+        alert("You are not the owner");
+      } else if (inWarrenty == false) {
+        alert("You are the Owner! But Warrenty has expired");
       }
       //alert("You are the Owner! But Warrenty has expired")
-      if (actualAccountOwner == currentAccount && inWarrenty)
-        setSuccess(true);
-      setBrandId('');
-      setProductId('');
+      if (actualAccountOwner == currentAccount && inWarrenty) setSuccess(true);
+      setBrandId("");
+      setProductId("");
     } catch (err) {
       /*
       /*if (!err?.response) {
@@ -47,23 +46,26 @@ function Customer() {
       }*/
       errRef.current.focus();
     }
-  }
+  };
 
   return (
     <div className="registerContainer">
-
       {/*if token id was correct -> show product */}
       {success ? (
         //<Link to='/dh'></Link>
         <ViewProduct title="My Product" text="Describe the product" imgURL="" />
       ) : (
         <section>
-          <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+          <p
+            ref={errRef}
+            className={errMsg ? "errmsg" : "offscreen"}
+            aria-live="assertive"
+          >
+            {errMsg}
+          </p>
           <h1>Check Ownership</h1>
           <form onSubmit={handleSubmit}>
-            <label htmlFor="brandid">
-              Brand ID:
-            </label>
+            <label htmlFor="brandid">Brand ID:</label>
             <input
               type="text"
               id="brandid"
@@ -77,9 +79,7 @@ function Customer() {
               onFocus={() => setBrandIdFocus(true)}
               onBlur={() => setBrandIdFocus(false)}
             />
-            <label htmlFor="productid">
-              Product ID:
-            </label>
+            <label htmlFor="productid">Product ID:</label>
             <input
               type="text"
               id="productid"
@@ -93,10 +93,13 @@ function Customer() {
               onFocus={() => setProductIdFocus(true)}
               onBlur={() => setProductIdFocus(false)}
             />
-            <button disabled={!brandId || !productId ? true : false} >Check</button>
+            <button disabled={!brandId || !productId ? true : false}>
+              Check
+            </button>
           </form>
         </section>
-      )}</div>
+      )}
+    </div>
   );
 }
 
