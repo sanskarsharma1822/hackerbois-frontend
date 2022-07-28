@@ -125,7 +125,7 @@ function ViewTable() {
                 <td>{currBrand.brandName.toString()}</td>
                 <td>{currBrand.brandEmailAddress.toString()}</td>
                 <td>{currBrand.warrantyPeriod.toString()}</td>
-                <td>{currBrand.smartContractAddress.toString()}</td>
+                {/* <td>{currBrand.smartContractAddress.toString()}</td> */}
               </tr>
             ))}
         </tbody>

@@ -1,7 +1,8 @@
 import Moralis from "moralis";
 import console from "console-browserify";
-import dotenv from "dotenv";
-dotenv.config();
+//
+
+// require("dotenv").config();
 
 async function storeData(
   name,
@@ -11,6 +12,8 @@ async function storeData(
   description,
   price
 ) {
+  // MORALIS VARIABLES TO BE STORED IN ENV
+
   const serverUrl = process.env.SERVER_URL;
   const appId = process.env.APP_ID;
   const masterKey = process.env.MASTER_KEY;

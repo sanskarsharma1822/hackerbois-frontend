@@ -10,6 +10,7 @@ import "../customer/customer.css";
 import axios from "../../api/axios.js";
 import Warehouse from "./warehouse.js";
 import console from "console-browserify";
+import Moralis from "moralis";
 
 //Shanky Imports
 //-----------------------------------------------------------------------
@@ -210,6 +211,18 @@ function RegisterBrand() {
     updateFee();
   }, [warrenty]);
 
+  useEffect(() => {
+    Moralis.onAccountChanged((account) => {
+      // console.log(`Account changed to ${account}`)
+      // if (account == null) {
+      //     window.localStorage.removeItem("connected")
+      //     deactivateWeb3()
+      //     console.log("Null Account found")
+      // }
+      updateUI();
+    });
+  }, []);
+
   //-------------------------------------------------------------------------------------
 
   return (
@@ -218,10 +231,9 @@ function RegisterBrand() {
       {/* brandID !== 0 && typeof brandID !== "undefined" */}
       {brandID !== "0" && typeof brandID !== "undefined" ? (
         //<Link to='/dh'></Link>
-        <Warehouse
-          brandIndex={brandIndex}
-          brandAddress={smartContractAddress}
-        />
+        <div>
+          <Warehouse brandIndex={brandIndex} />
+        </div>
       ) : (
         <section>
           <p

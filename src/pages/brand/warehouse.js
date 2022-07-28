@@ -29,9 +29,18 @@ function Warehouse({ brandIndex }) {
   const [brandAddress, setBrandAddress] = useState("");
   const [entryFee, setEntryFee] = useState("10000000000000000");
   const [brandWarrantyLeft, setBrandWarrantyLeft] = useState("0");
+  const [totalTokens, setTotalTokens] = useState("0");
+  const [currToken, setCurrToken] = useState(0);
 
   const adminAddress =
     chainId in adminContractAddress ? adminContractAddress[chainId][0] : null;
+
+  const demoArr = [
+    "https://ipfs.moralis.io:2053/ipfs/QmeHhwna4RP3yeZPVnvy5afiE8oQWdqcSg4nk5ri2YV5rp",
+    "https://ipfs.moralis.io:2053/ipfs/QmZb67tABujYUXqpZxtq1eM68bu6heo6gsZgVGsyCn7bq6",
+    "https://ipfs.moralis.io:2053/ipfs/QmbH75rznJ2cpMxdJYUVsC8eNjxjUfNthw1WGPZDWrAcKZ",
+    "https://ipfs.moralis.io:2053/ipfs/QmZtt24dm1YYPoYkvjW2gwM1pWrxeMCwekrLGdioTeY5C9",
+  ];
 
   //------------------------------------------------------
 
@@ -75,13 +84,48 @@ function Warehouse({ brandIndex }) {
     params: { index: brandIndex },
   });
 
+  // const { runContractFunction: totalSupply } = useWeb3Contract({
+  //   abi: brandsABI,
+  //   contractAddress: brandAddress,
+  //   functionName: "totalSupply",
+  //   params: {},
+  // });
+
+  const updateCards = async function () {
+    while (currToken < 4) {
+      console.log(currToken);
+      setCurrToken(currToken++);
+    }
+  };
+
+  const [temp, setTemp] = useState("0");
   const updateUI = async function () {
     const tempBrandAddress = (await getBrandSmartContractAddress()).toString();
     const tempBrandWarrantyLeft = (await getBrandWarrantyLeft()).toString();
+    // const tempSupply = (await totalSupply()).toString();
     setBrandWarrantyLeft(tempBrandWarrantyLeft);
     setBrandAddress(tempBrandAddress);
+    setTemp("1");
+    // setTotalTokens(tempSupply);
+    // if(totalTokens>0){
+    //   updateCards();
+    // }
+    // updateCards();
+    // while (currToken < 4) {
+    //   console.log(currToken);
+    //   setCurrToken(currToken++);
+    // }
     // console.log(tempAdd);
   };
+
+  useEffect(() => {
+    if (temp == "1") {
+      // while (currToken < 5) {
+      //   console.log(currToken);
+      //   setCurrToken(currToken + 1);
+      // }
+    }
+  }, [temp]);
 
   useEffect(() => {
     if (isWeb3Enabled) {
@@ -91,28 +135,34 @@ function Warehouse({ brandIndex }) {
 
   useEffect(() => {
     async function updateFee() {
-      console.log(warrantyAdded);
+      // console.log(warrantyAdded);
       const tempMul = (await getEntryFee()).toString();
       const tempFee = tempMul * 0.01;
       const tempFeeString = tempFee.toString();
       const final = ethers.utils.parseEther(tempFeeString);
-      console.log(final.toString());
+      // console.log(final.toString());
       setEntryFee(final.toString());
     }
     updateFee();
   }, [warrantyAdded]);
 
-  // Moralis.onAccountChanged(updateUI());
-
-  Moralis.onAccountChanged(() => {
-    updateUI();
-  });
+  useEffect(() => {
+    Moralis.onAccountChanged((account) => {
+      // console.log(`Account changed to ${account}`)
+      // if (account == null) {
+      //     window.localStorage.removeItem("connected")
+      //     deactivateWeb3()
+      //     console.log("Null Account found")
+      // }
+      updateUI();
+    });
+  }, []);
 
   return (
     //add new product btn
     <div className="warehouse">
-      {console.log(brandIndex)}
-      {console.log(brandAddress)}
+      {/* {console.log(brandIndex)} */}
+      {/* {console.log(brandAddress)} */}
 
       <section className="head">
         <h1>Welcome to Warehouse</h1>

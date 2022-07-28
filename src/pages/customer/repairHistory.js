@@ -3,7 +3,7 @@ import axios from "axios";
 import * as ReactBootstrap from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function Repair() {
+function Repair({ brandIndex }) {
   //console.log("ho!")
   const [entries, setEntries] = useState({ blogs: [] });
 
