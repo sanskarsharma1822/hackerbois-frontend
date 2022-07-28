@@ -1,9 +1,20 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
 import "./customer.css";
+import storeRepairHistory from "../../backendScripts/storeRepairHistory";
 import axios from "../../api/axios.js";
 
-function ClaimWarrenty({ brandIndex }) {
+//------------------------------------------------------------------------------------
+import { useMoralis, useWeb3Contract } from "react-moralis";
+import { brandsABI } from "../../constants/Brands/brandsConstant";
+import {
+  adminABI,
+  adminContractAddress,
+} from "../../constants/Admin/adminConstants";
+
+//------------------------------------------------------------------------------------
+
+function ClaimWarrenty() {
   const userRef = useRef();
   const errRef = useRef();
 
@@ -14,6 +25,40 @@ function ClaimWarrenty({ brandIndex }) {
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
 
+  //-----------------------------------------------------------
+  const [ipfsReturn, setIpfsReturn] = useState();
+  const ipfsURL = "";
+  //-----------------------------------------------------------
+
+  //----------------------------------------------------
+  const { isWeb3Enabled, account, chainId: chainIdHex } = useMoralis();
+  const chainId = parseInt(chainIdHex);
+  const [brandAddress, setBrandAddress] = useState("");
+  const adminAddress =
+    chainId in adminContractAddress ? adminContractAddress[chainId][0] : null;
+
+  const brandIndex = 0;
+  const { runContractFunction: getBrandSmartContractAddress } = useWeb3Contract(
+    {
+      abi: adminABI,
+      contractAddress: adminAddress,
+      functionName: "getBrandSmartContractAddress",
+      params: { index: brandIndex },
+    }
+  );
+
+  const updateUI = async function () {
+    const tempBrandAddress = (await getBrandSmartContractAddress()).toString();
+    setBrandAddress(tempBrandAddress);
+    // console.log(tempAdd);
+  };
+
+  useEffect(() => {
+    if (isWeb3Enabled) {
+      updateUI();
+    }
+  }, [isWeb3Enabled]);
+  //-----------------------------------------------------
   useEffect(() => {
     userRef.current.focus();
   }, []);
@@ -63,7 +108,16 @@ function ClaimWarrenty({ brandIndex }) {
               onFocus={() => setDescpFocus(true)}
               onBlur={() => setDescpFocus(false)}
             />
-            <button disabled={!descp ? true : false}>Send Request</button>
+            <button
+              disabled={!descp ? true : false}
+              onClick={async () => {
+                const tempArr = storeRepairHistory(ipfsURL, descp);
+                setIpfsReturn(tempArr);
+                // console.log(ipfsReturn);
+              }}
+            >
+              Send Request
+            </button>
           </form>
           <p>
             Already registered?

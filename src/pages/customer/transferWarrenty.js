@@ -1,9 +1,20 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
 import "../../forms/register.css";
+import storeOwnerHistory from "../../backendScripts/storeOwnerHistory";
 import axios from "../../api/axios.js";
 
-function Transfer({ brandIndex }) {
+//------------------------------------------------------------------------------------
+import { useMoralis, useWeb3Contract } from "react-moralis";
+import { brandsABI } from "../../constants/Brands/brandsConstant";
+import {
+  adminABI,
+  adminContractAddress,
+} from "../../constants/Admin/adminConstants";
+
+//------------------------------------------------------------------------------------
+
+function Transfer() {
   const userRef = useRef();
   const errRef = useRef();
 
@@ -16,7 +27,41 @@ function Transfer({ brandIndex }) {
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
 
+  //-----------------------------------------------------------
+  const [ipfsReturn, setIpfsReturn] = useState();
+  const ipfsURL = "";
+  //-----------------------------------------------------------
+
   const response = false; //dummy variable
+
+  //----------------------------------------------------
+  const { isWeb3Enabled, account, chainId: chainIdHex } = useMoralis();
+  const chainId = parseInt(chainIdHex);
+  const [brandAddress, setBrandAddress] = useState("");
+  const adminAddress =
+    chainId in adminContractAddress ? adminContractAddress[chainId][0] : null;
+  const brandIndex = 0;
+  const { runContractFunction: getBrandSmartContractAddress } = useWeb3Contract(
+    {
+      abi: adminABI,
+      contractAddress: adminAddress,
+      functionName: "getBrandSmartContractAddress",
+      params: { index: brandIndex },
+    }
+  );
+
+  const updateUI = async function () {
+    const tempBrandAddress = (await getBrandSmartContractAddress()).toString();
+    setBrandAddress(tempBrandAddress);
+    // console.log(tempAdd);
+  };
+
+  useEffect(() => {
+    if (isWeb3Enabled) {
+      updateUI();
+    }
+  }, [isWeb3Enabled]);
+  //-----------------------------------------------------
 
   useEffect(() => {
     userRef.current.focus();
@@ -82,7 +127,14 @@ function Transfer({ brandIndex }) {
               onFocus={() => setContactFocus(true)}
               onBlur={() => setContactFocus(false)}
             />
-            <button disabled={!contact || !newAdd ? true : false}>
+            <button
+              disabled={!contact || !newAdd ? true : false}
+              onClick={async () => {
+                const tempArr = storeOwnerHistory(ipfsURL, newAdd);
+                setIpfsReturn(tempArr);
+                // console.log(ipfsReturn);
+              }}
+            >
               Transfer
             </button>
           </form>

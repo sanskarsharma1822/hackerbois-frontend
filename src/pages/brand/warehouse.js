@@ -200,7 +200,12 @@ function Warehouse({ brandIndex }) {
         <div>{brandWarrantyLeft}</div>
       </section>
       <section>
-        {showForm ? <AddProduct /> : <h3>Your Products</h3>}
+        {showForm ? (
+          // <AddProduct brandIndex={brandIndex} />
+          <AddProduct brandIndex={0} />
+        ) : (
+          <h3>Your Products</h3>
+        )}
         <div className="cards-outer">
           <section className="cards">
             <Product

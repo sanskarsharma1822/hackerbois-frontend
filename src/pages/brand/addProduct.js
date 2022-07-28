@@ -9,15 +9,25 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../customer/customer.css";
 import storeData from "../../backendScripts/storeToken";
+
 import axios from "../../api/axios.js";
 // import storeData from "../../backendScripts/storeToken";
 import console from "console-browserify";
+//------------------------------------------------------------------------------------
+import { useMoralis, useWeb3Contract } from "react-moralis";
+import { brandsABI } from "../../constants/Brands/brandsConstant";
+import {
+  adminABI,
+  adminContractAddress,
+} from "../../constants/Admin/adminConstants";
+import { getSpaceUntilMaxLength } from "@testing-library/user-event/dist/utils";
 
+//------------------------------------------------------------------------------------
 const NAME_REGEX = /^[a-zA-Z0-9_.-]*$/;
 const PRICE_REGEX = /^[0-9]{1,45}$/;
 const REGISTER_URL = "/register"; //fitting url
 
-function AddProduct() {
+function AddProduct({ brandIndex }) {
   const userRef = useRef();
   const errRef = useRef();
 
@@ -47,10 +57,81 @@ function AddProduct() {
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
 
+  const [prodWarranty, setProdWarranty] = useState("0");
+  const [prodWarrantyFocus, setProdWarrantyFocus] = useState(false);
+
   //-----------------------------------------------------------
-  const [ipfsReturn, setIpfsReturn] = useState([]);
+  const [ipfsReturn, setIpfsReturn] = useState(["0", "0"]);
   //-----------------------------------------------------------
 
+  //----------------------------------------------------
+  const { isWeb3Enabled, account, chainId: chainIdHex } = useMoralis();
+  const chainId = parseInt(chainIdHex);
+  const [brandAddress, setBrandAddress] = useState("");
+  const adminAddress =
+    chainId in adminContractAddress ? adminContractAddress[chainId][0] : null;
+
+  // const brandIndex = 0;
+
+  const { runContractFunction: getBrandSmartContractAddress } = useWeb3Contract(
+    {
+      abi: adminABI,
+      contractAddress: adminAddress,
+      functionName: "getBrandSmartContractAddress",
+      params: { index: brandIndex },
+    }
+  );
+
+  const { runContractFunction: createCollectible } = useWeb3Contract({
+    abi: brandsABI,
+    contractAddress: brandAddress,
+    functionName: "createCollectible",
+    params: {
+      _tokenURI: ipfsReturn[0],
+      _warrantyPeriod: prodWarranty,
+      _history: ipfsReturn[1],
+    },
+  });
+
+  const { runContractFunction: getMaxSupply } = useWeb3Contract({
+    abi: brandsABI,
+    contractAddress: brandAddress,
+    functionName: "getMaxSupply",
+    params: {},
+  });
+
+  const [max, setMax] = useState("0");
+
+  const updateUI = async function () {
+    const tempBrandAddress = (await getBrandSmartContractAddress()).toString();
+    setBrandAddress(tempBrandAddress);
+    const tempMax = await getMaxSupply();
+    setMax(tempMax.toString());
+    // ~.log(tempAdd);
+  };
+
+  useEffect(() => {
+    if (isWeb3Enabled) {
+      updateUI();
+    }
+  }, [isWeb3Enabled]);
+
+  useEffect(() => {
+    {
+      console.log(brandAddress);
+      console.log(prodWarranty);
+    }
+    async function updateCollectible() {
+      await createCollectible({
+        onSuccess: () => console.log("success"),
+        onError: (error) => {
+          console.log(error);
+        },
+      });
+    }
+    updateCollectible();
+  }, [ipfsReturn]);
+  //-----------------------------------------------------
   //whenever the thing in the bracket(dependency array) changes this useEffect will be called again
   useEffect(() => {
     userRef.current.focus();
@@ -69,7 +150,7 @@ function AddProduct() {
   //if any of the variables change
   useEffect(() => {
     setErrMsg("");
-  }, [name, price, descp, imgURL, serialNo, prodLink, tokenId]);
+  }, [name, price, descp, serialNo, prodLink]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -98,7 +179,7 @@ function AddProduct() {
       //need value attrib on inputs for this
       setName("");
       setPrice("");
-      setImgURL("");
+      // setImgURL("");
       setSerialNo("");
       setProdLink("");
       setTokenId("");
@@ -114,7 +195,9 @@ function AddProduct() {
   };
 
   return (
-    <div classsName="registerContainer">
+    <div classsName="newProd">
+      {console.log(max)}
+      {/* {console.log(ipfsReturn)} */}
       {/*if registration of product was successful -> go to warehouse */}
       {success ? (
         //send info to db
@@ -129,142 +212,137 @@ function AddProduct() {
             {errMsg}
           </p>
           <h1>Register New Product</h1>
-          <form onSubmit={handleSubmit}>
-            <label htmlFor="name">Name:</label>
-            <input
-              type="text"
-              id="name"
-              ref={userRef}
-              autoComplete="off"
-              onChange={(e) => setName(e.target.value)}
-              value={name}
-              required
-              aria-invalid={validName ? "false" : "true"}
-              aria-describedby="uidnote" //wtf is this
-              onFocus={() => setNameFocus(true)}
-              onBlur={() => setNameFocus(false)}
-            />
-            <p
-              id="uidnote"
-              className={
-                nameFocus && name && !validName ? "instructions" : "offscreen"
-              }
-            >
-              <FontAwesomeIcon icon={faInfoCircle} />
-              4 to 24 characters.
-              <br />
-              Must begin with a letter.
-              <br />
-              Letters, numbers, underscores, hyphens allowed.
-            </p>
-            <label htmlFor="price">Price:</label>
-            <input
-              type="number"
-              id="price"
-              onChange={(e) => setPrice(e.target.value)}
-              value={price}
-              required
-              aria-invalid={validPrice ? "false" : "true"}
-              aria-describedby="pricenote"
-              onFocus={() => setPriceFocus(true)}
-              onBlur={() => setPriceFocus(false)}
-            />
-            <p
-              id="pricenote"
-              className={
-                priceFocus && !validPrice ? "instructions" : "offscreen"
-              }
-            >
-              <FontAwesomeIcon icon={faInfoCircle} />
-              Price should be a Number
-            </p>
-            <label htmlFor="imgurl">Image URL:</label>
-            <input
-              type="text" //attach img/ look for it in sys
-              id="imgurl"
-              onChange={(e) => setImgURL(e.target.value)}
-              value={imgURL}
-              required
-              //aria-invalid={validMatch ? "false" : "true"}
-              //aria-describedby="confirmnote"
-              onFocus={() => setImgURLFocus(true)}
-              onBlur={() => setImgURLFocus(false)}
-            />
-            <label htmlFor="serialNo">Serial No.:</label>
-            <input
-              type="text"
-              id="serialNo"
-              ref={userRef}
-              autoComplete="off"
-              onChange={(e) => setSerialNo(e.target.value)}
-              value={serialNo}
-              required
-              //aria-invalid={validName ? "false" : "true"}
-              //aria-describedby="uidnote"
-              onFocus={() => setSnoFocus(true)}
-              onBlur={() => setSnoFocus(false)}
-            />
-            <label htmlFor="prodLink">Product Link on Flipkart:</label>
-            <input
-              type="text"
-              id="prodLink"
-              ref={userRef}
-              autoComplete="off"
-              onChange={(e) => setProdLink(e.target.value)}
-              value={prodLink}
-              required
-              //aria-invalid={validName ? "false" : "true"}
-              //aria-describedby="uidnote"
-              onFocus={() => setProdLinkFocus(true)}
-              onBlur={() => setProdLinkFocus(false)}
-            />
-            <label htmlFor="descp">Description:</label>
-            <input
-              type="text"
-              id="descp"
-              ref={userRef}
-              autoComplete="off"
-              onChange={(e) => setDescp(e.target.value)}
-              value={descp}
-              required
-              //aria-invalid={validName ? "false" : "true"}
-              //aria-describedby="uidnote"
-              onFocus={() => setDescpFocus(true)}
-              onBlur={() => setDescpFocus(false)}
-            />
-            <label htmlFor="tokenid">Token Id:</label>
-            <input
-              type="text"
-              id="tokenid"
-              ref={userRef}
-              autoComplete="off"
-              onChange={(e) => setTokenId(e.target.value)}
-              value={tokenId}
-              required
-              //aria-invalid={validName ? "false" : "true"}
-              //aria-describedby="uidnote"
-              onFocus={() => setTokenFocus(true)}
-              onBlur={() => setTokenFocus(false)}
-            />
-            <button
-              disabled={!validName || !validPrice ? true : false}
-              onClick={async () => {
-                const tempArr = storeData(
-                  name,
-                  imgURL,
-                  serialNo,
-                  prodLink,
-                  descp,
-                  price
-                );
-                setIpfsReturn(tempArr);
-                console.log(ipfsReturn[0]);
-                console.log(ipfsReturn[1]);
-              }}
-            >
-              Register
-            </button>
-          </form>
+          {/* <form onSubmit={handleSubmit}> */}
+          <label htmlFor="name">Name:</label>
+          <input
+            type="text"
+            id="name"
+            ref={userRef}
+            autoComplete="off"
+            onChange={(e) => setName(e.target.value)}
+            value={name}
+            required
+            onFocus={() => setNameFocus(true)}
+            onBlur={() => setNameFocus(false)}
+          />
+          <p
+            id="uidnote"
+            className={
+              nameFocus && name && !validName ? "instructions" : "offscreen"
+            }
+          >
+            <FontAwesomeIcon icon={faInfoCircle} />
+            4 to 24 characters.
+            <br />
+            Must begin with a letter.
+            <br />
+            Letters, numbers, underscores, hyphens allowed.
+          </p>
+          <label htmlFor="price">Price:</label>
+          <input
+            type="number"
+            id="price"
+            onChange={(e) => setPrice(e.target.value)}
+            value={price}
+            required
+            aria-invalid={validPrice ? "false" : "true"}
+            aria-describedby="pricenote"
+            onFocus={() => setPriceFocus(true)}
+            onBlur={() => setPriceFocus(false)}
+          />
+          <p
+            id="pricenote"
+            className={priceFocus && !validPrice ? "instructions" : "offscreen"}
+          >
+            <FontAwesomeIcon icon={faInfoCircle} />
+            Price should be a Number
+          </p>
+          <label htmlFor="serialNo">Serial No.:</label>
+          <input
+            type="text"
+            id="serialNo"
+            ref={userRef}
+            autoComplete="off"
+            onChange={(e) => setSerialNo(e.target.value)}
+            value={serialNo}
+            required
+            //aria-invalid={validName ? "false" : "true"}
+            //aria-describedby="uidnote"
+            onFocus={() => setSnoFocus(true)}
+            onBlur={() => setSnoFocus(false)}
+          />
+          <label htmlFor="prodLink">Product Link on Flipkart:</label>
+          <input
+            type="text"
+            id="prodLink"
+            ref={userRef}
+            autoComplete="off"
+            onChange={(e) => setProdLink(e.target.value)}
+            value={prodLink}
+            required
+            //aria-invalid={validName ? "false" : "true"}
+            //aria-describedby="uidnote"
+            onFocus={() => setProdLinkFocus(true)}
+            onBlur={() => setProdLinkFocus(false)}
+          />
+          <label htmlFor="descp">Description:</label>
+          <input
+            type="text"
+            id="descp"
+            ref={userRef}
+            autoComplete="off"
+            onChange={(e) => setDescp(e.target.value)}
+            value={descp}
+            required
+            //aria-invalid={validName ? "false" : "true"}
+            //aria-describedby="uidnote"
+            onFocus={() => setDescpFocus(true)}
+            onBlur={() => setDescpFocus(false)}
+          />
+          <label htmlFor="prodWarranty">
+            Enter product's warranty in days `Q`:
+          </label>
+          <input
+            type="number"
+            id="prodWarranty"
+            onChange={(e) => setProdWarranty(e.target.value)}
+            value={prodWarranty}
+            required
+            // aria-invalid={validprodWarranty ? "false" : "true"}
+            // aria-describedby="prodWarrantynote"
+            onFocus={() => setProdWarrantyFocus(true)}
+            onBlur={() => setProdWarrantyFocus(false)}
+          />
+          <lable htmlfor="myfile">Select Image : </lable>
+          <input
+            type="file"
+            id="myfile"
+            name="myfile"
+            onChange={(e) => {
+              setImgURL(e.target.files);
+            }}
+          />
+
+          <button
+            disabled={!validName || !validPrice ? true : false}
+            onClick={async () => {
+              // return(await login();
+              const tempArr = await storeData(
+                name,
+                imgURL,
+                serialNo,
+                prodLink,
+                descp,
+                price
+              );
+              // console.log(tempArr[0]);
+              // console.log(tempArr[1]);
+              setIpfsReturn(tempArr);
+            }}
+          >
+            Register
+          </button>
+          {/* </form> */}
         </section>
       )}
     </div>
