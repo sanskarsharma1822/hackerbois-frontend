@@ -249,7 +249,7 @@ function AddProduct({ brandIndex, brandAddress, updateTokenCount }) {
         //send info to db
         window.location.reload()
       ) : (
-        <section>
+        <section className="addProduct">
           <p
             ref={errRef}
             className={errMsg ? "errmsg" : "offscreen"}
@@ -284,6 +284,7 @@ function AddProduct({ brandIndex, brandAddress, updateTokenCount }) {
             <br />
             Letters, numbers, underscores, hyphens allowed.
           </p>
+          <hr></hr>
           <label htmlFor="price">Price:</label>
           <input
             type="number"
@@ -303,6 +304,7 @@ function AddProduct({ brandIndex, brandAddress, updateTokenCount }) {
             <FontAwesomeIcon icon={faInfoCircle} />
             Price should be a Number
           </p>
+          <hr></hr>
           <label htmlFor="serialNo">Serial No.:</label>
           <input
             type="text"
@@ -317,6 +319,7 @@ function AddProduct({ brandIndex, brandAddress, updateTokenCount }) {
             onFocus={() => setSnoFocus(true)}
             onBlur={() => setSnoFocus(false)}
           />
+          <hr></hr>
           <label htmlFor="prodLink">Product Link on Flipkart:</label>
           <input
             type="text"
@@ -331,6 +334,7 @@ function AddProduct({ brandIndex, brandAddress, updateTokenCount }) {
             onFocus={() => setProdLinkFocus(true)}
             onBlur={() => setProdLinkFocus(false)}
           />
+          <hr></hr>
           <label htmlFor="descp">Description:</label>
           <input
             type="text"
@@ -345,8 +349,9 @@ function AddProduct({ brandIndex, brandAddress, updateTokenCount }) {
             onFocus={() => setDescpFocus(true)}
             onBlur={() => setDescpFocus(false)}
           />
+          <hr></hr>
           <label htmlFor="prodWarranty">
-            Enter product's warranty in days `Q`:
+            Enter product's warranty in days:
           </label>
           <input
             type="number"
@@ -359,6 +364,7 @@ function AddProduct({ brandIndex, brandAddress, updateTokenCount }) {
             onFocus={() => setProdWarrantyFocus(true)}
             onBlur={() => setProdWarrantyFocus(false)}
           />
+          <hr></hr>
           <lable htmlfor="myfile">Select Image : </lable>
           <input
             type="file"
@@ -368,7 +374,7 @@ function AddProduct({ brandIndex, brandAddress, updateTokenCount }) {
               setImgURL(e.target.files);
             }}
           />
-
+          <hr></hr>
           <button
             disabled={
               !validName ||

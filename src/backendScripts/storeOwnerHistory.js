@@ -67,9 +67,4 @@ async function storeOwnerHistory(ipfs, newOwner) {
   return result;
 }
 
-// async function main() {
-//     await storeOwnerHistory("https://ipfs.io/ipfs/QmQNm3U5tAPqgGEC77QhwKgt5ngTdKyEcPjxH1hQXe5Y61%22)
-// }
-// }
-
 export default storeOwnerHistory;
