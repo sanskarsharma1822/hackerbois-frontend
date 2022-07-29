@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import "../../forms/register.css";
 import storeOwnerHistory from "../../backendScripts/storeOwnerHistory";
 import axios from "../../api/axios.js";
+import console from "console-browserify";
 
 //------------------------------------------------------------------------------------
 import { useMoralis, useWeb3Contract } from "react-moralis";
@@ -14,7 +15,7 @@ import {
 
 //------------------------------------------------------------------------------------
 
-function Transfer() {
+function Transfer({ brandIndex, brandAddress, tokenId }) {
   const userRef = useRef();
   const errRef = useRef();
 
@@ -37,21 +38,8 @@ function Transfer() {
   //----------------------------------------------------
   const { isWeb3Enabled, account, chainId: chainIdHex } = useMoralis();
   const chainId = parseInt(chainIdHex);
-  const [brandAddress, setBrandAddress] = useState("");
   const adminAddress =
     chainId in adminContractAddress ? adminContractAddress[chainId][0] : null;
-  // const brandIndex = 0;
-
-  //***********************************************************************************8 */
-
-  // const { runContractFunction: getBrandSmartContractAddress } = useWeb3Contract(
-  //   {
-  //     abi: adminABI,
-  //     contractAddress: adminAddress,
-  //     functionName: "getBrandSmartContractAddress",
-  //     params: { index: brandIndex },
-  //   }
-  // );
 
   const { runContractFunction: viewHistory } = useWeb3Contract({
     abi: brandsABI,
@@ -72,11 +60,7 @@ function Transfer() {
     },
   });
 
-  const updateUI = async function () {
-    const tempBrandAddress = (await getBrandSmartContractAddress()).toString();
-    setBrandAddress(tempBrandAddress);
-    // console.log(tempAdd);
-  };
+  const updateUI = async function () {};
 
   useEffect(() => {
     if (isWeb3Enabled) {

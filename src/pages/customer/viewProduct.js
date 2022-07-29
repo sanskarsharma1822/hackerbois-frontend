@@ -19,6 +19,8 @@ function ViewProduct({
 
   return (
     <div className="viewProd">
+      {console.log(brandAddress)}
+      {console.log(tokenId)}
       <h1>Product Information</h1>
       <Card style={{ width: "18rem" }}>
         <Card.Img variant="top" src={imgURL} />

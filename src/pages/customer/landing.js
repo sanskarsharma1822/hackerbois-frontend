@@ -140,12 +140,15 @@ function Customer() {
         const tempBool = await isOwner({
           onError: (error) => console.log(error),
         });
-        if (tempBool) console.log("You are the owner");
-        else console.log("You are not the owner");
-        setBrandId("0");
-        setBrandIndex("0");
-        setProductId("0");
-        setSuccess(true);
+        if (tempBool) {
+          // console.log(brandAddress);
+          // console.log(productId);
+          setSuccess(true);
+        } else {
+          setBrandId("0");
+          setBrandIndex("0");
+          setProductId("0");
+        }
       }
       // }
     } catch (err) {
@@ -170,7 +173,7 @@ function Customer() {
           imgURL=""
           brandIndex={brandIndex}
           brandAddress={brandAddress}
-          tokeId={productId}
+          tokenId={productId}
         />
       ) : (
         <section>

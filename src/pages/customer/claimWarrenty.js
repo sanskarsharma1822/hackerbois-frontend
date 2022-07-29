@@ -34,19 +34,8 @@ function ClaimWarrenty({ brandIndex, brandAddress, tokenId }) {
   //----------------------------------------------------
   const { isWeb3Enabled, account, chainId: chainIdHex } = useMoralis();
   const chainId = parseInt(chainIdHex);
-  const [brandAddress, setBrandAddress] = useState("");
   const adminAddress =
     chainId in adminContractAddress ? adminContractAddress[chainId][0] : null;
-
-  // const brandIndex = 0;
-  // const { runContractFunction: getBrandSmartContractAddress } = useWeb3Contract(
-  //   {
-  //     abi: adminABI,
-  //     contractAddress: adminAddress,
-  //     functionName: "getBrandSmartContractAddress",
-  //     params: { index: brandIndex },
-  //   }
-  // );
 
   const { runContractFunction: viewHistory } = useWeb3Contract({
     abi: brandsABI,
@@ -67,11 +56,7 @@ function ClaimWarrenty({ brandIndex, brandAddress, tokenId }) {
     },
   });
 
-  const updateUI = async function () {
-    const tempBrandAddress = (await getBrandSmartContractAddress()).toString();
-    setBrandAddress(tempBrandAddress);
-    // console.log(tempAdd);
-  };
+  const updateUI = async function () {};
 
   useEffect(() => {
     if (isWeb3Enabled) {
@@ -80,10 +65,6 @@ function ClaimWarrenty({ brandIndex, brandAddress, tokenId }) {
   }, [isWeb3Enabled]);
 
   useEffect(() => {
-    {
-      console.log(brandAddress);
-      console.log(tokenId);
-    }
     async function updateHistory() {
       await setHistory({
         onSuccess: () => console.log("success"),
@@ -119,6 +100,8 @@ function ClaimWarrenty({ brandIndex, brandAddress, tokenId }) {
 
   return (
     <div classsName="registerContainer">
+      {console.log(brandAddress)}
+      {console.log(tokenId)}
       {success ? (
         <h1>We'll let you know if the query was processed</h1>
       ) : (
