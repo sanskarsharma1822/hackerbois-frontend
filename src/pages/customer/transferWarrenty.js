@@ -13,11 +13,14 @@ import {
   adminContractAddress,
 } from "../../constants/Admin/adminConstants";
 
+import { useNotification } from "web3uikit";
+
 //------------------------------------------------------------------------------------
 
 function Transfer({ brandIndex, brandAddress, tokenId }) {
   const userRef = useRef();
   const errRef = useRef();
+  const dispatch = useNotification();
 
   const [newAdd, setNewAdd] = useState("");
   const [newAddFocus, setNewAddFocus] = useState(false);
@@ -29,8 +32,8 @@ function Transfer({ brandIndex, brandAddress, tokenId }) {
   const [success, setSuccess] = useState(false);
 
   //-----------------------------------------------------------
-  const [ipfsReturn, setIpfsReturn] = useState();
-  const [ipfsURL, setIpfsUrl] = useState();
+  const [ipfsReturn, setIpfsReturn] = useState("");
+  const [ipfsURL, setIpfsUrl] = useState("");
   //-----------------------------------------------------------
 
   const response = false; //dummy variable
@@ -41,10 +44,10 @@ function Transfer({ brandIndex, brandAddress, tokenId }) {
   const adminAddress =
     chainId in adminContractAddress ? adminContractAddress[chainId][0] : null;
 
-  const { runContractFunction: viewHistory } = useWeb3Contract({
+  const { runContractFunction: viewhistory } = useWeb3Contract({
     abi: brandsABI,
     contractAddress: brandAddress,
-    functionName: "viewHistory",
+    functionName: "viewhistory",
     params: {
       _tokenId: tokenId,
     },
@@ -56,32 +59,72 @@ function Transfer({ brandIndex, brandAddress, tokenId }) {
     functionName: "setHistory",
     params: {
       _tokenId: tokenId,
-      _newHistory: ipfsReturn,
+      _newhistory: ipfsReturn,
     },
   });
 
-  const updateUI = async function () {};
+  const { runContractFunction: transferToken } = useWeb3Contract({
+    abi: brandsABI,
+    contractAddress: brandAddress,
+    functionName: "transferToken",
+    params: {
+      _sendTo: newAdd,
+      _tokenId: tokenId,
+    },
+  });
 
   useEffect(() => {
+    async function updateIpfsURL() {
+      const tempHistory = await viewhistory({
+        onError: (error) => console.log(error),
+      });
+
+      setIpfsUrl(tempHistory.toString());
+    }
+
     if (isWeb3Enabled) {
-      updateUI();
+      updateIpfsURL();
     }
-  }, [isWeb3Enabled]);
+  }, []);
+
+  const handleSuccess = async function (tx) {
+    await tx.wait(1);
+    handleNotification(tx);
+  };
+
+  const handleNotification = function (tx) {
+    dispatch({
+      type: "success",
+      message: `Warranty transferred to ${newAdd}`,
+      title: "Transfer Success",
+      position: "topR",
+      icon: "bell",
+    });
+  };
+
+  const transfer = async function () {
+    await transferToken({
+      onSuccess: handleSuccess,
+      onError: (error) => console.log(error),
+    });
+  };
 
   useEffect(() => {
-    {
-      console.log(brandAddress);
-      console.log(tokenId);
-    }
+    console.log("updating");
     async function updateHistory() {
       await setHistory({
-        onSuccess: () => console.log("success"),
+        onSuccess: () => {
+          console.log("success ipfs");
+          transfer();
+        },
         onError: (error) => {
           console.log(error);
         },
       });
     }
-    updateHistory();
+    if (ipfsReturn !== "") {
+      updateHistory();
+    }
   }, [ipfsReturn]);
   //-----------------------------------------------------
 
@@ -94,14 +137,20 @@ function Transfer({ brandIndex, brandAddress, tokenId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (response == false) {
-        alert("Transfer was not a  :(");
-      } else if (response == true) {
-        alert("Transfer was a Success :)");
-        setSuccess(true);
-      }
-      setNewAdd("");
-      setContact("");
+      const updateStoreOwner = async () => {
+        const tempArr = storeOwnerHistory(ipfsURL, newAdd);
+        setIpfsReturn(tempArr);
+      };
+      updateStoreOwner();
+      // if (tempBool) {
+      //   // console.log(brandAddress);
+      //   // console.log(productId);
+      //   setSuccess(true);
+      // // } else {
+      //   setBrandId("0");
+      //   setBrandIndex("0");
+      //   setProductId("0");
+      // }
     } catch (err) {
       /*if any error in actual res*/
       errRef.current.focus();
@@ -153,15 +202,15 @@ function Transfer({ brandIndex, brandAddress, tokenId }) {
             />
             <button
               disabled={!contact || !newAdd ? true : false}
-              onClick={async () => {
-                const tempArr = storeOwnerHistory(
-                  // "https://ipfs.moralis.io:2053/ipfs/QmegsBtkjdjicW2RfvgcEH5VehbKwYKDZcKdpEGbxrXR1r",
-                  ipfsURL,
-                  newAdd
-                );
-                setIpfsReturn(tempArr);
-                // console.log(ipfsReturn);
-              }}
+              // onClick={async () => {
+              //   const tempArr = storeOwnerHistory(
+              //     // "https://ipfs.moralis.io:2053/ipfs/QmegsBtkjdjicW2RfvgcEH5VehbKwYKDZcKdpEGbxrXR1r",
+              //     ipfsURL,
+              //     newAdd
+              //   );
+              //   setIpfsReturn(tempArr);
+              //   // console.log(ipfsReturn);
+              // }}
             >
               Transfer
             </button>

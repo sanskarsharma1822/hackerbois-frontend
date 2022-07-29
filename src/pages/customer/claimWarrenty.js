@@ -8,6 +8,7 @@ import console from "console-browserify";
 //------------------------------------------------------------------------------------
 import { useMoralis, useWeb3Contract } from "react-moralis";
 import { brandsABI } from "../../constants/Brands/brandsConstant";
+import { useNotification } from "web3uikit";
 import {
   adminABI,
   adminContractAddress,
@@ -18,6 +19,7 @@ import {
 function ClaimWarrenty({ brandIndex, brandAddress, tokenId }) {
   const userRef = useRef();
   const errRef = useRef();
+  const dispatch = useNotification();
 
   const [descp, setDescp] = useState("");
   const [descpFocus, setDescpFocus] = useState(false);
@@ -27,8 +29,8 @@ function ClaimWarrenty({ brandIndex, brandAddress, tokenId }) {
   const [success, setSuccess] = useState(false);
 
   //-----------------------------------------------------------
-  const [ipfsReturn, setIpfsReturn] = useState();
-  const [ipfsURL, setIpfsUrl] = useState();
+  const [ipfsReturn, setIpfsReturn] = useState("");
+  const [ipfsURL, setIpfsUrl] = useState("");
   //-----------------------------------------------------------
 
   //----------------------------------------------------
@@ -37,10 +39,10 @@ function ClaimWarrenty({ brandIndex, brandAddress, tokenId }) {
   const adminAddress =
     chainId in adminContractAddress ? adminContractAddress[chainId][0] : null;
 
-  const { runContractFunction: viewHistory } = useWeb3Contract({
+  const { runContractFunction: viewhistory } = useWeb3Contract({
     abi: brandsABI,
     contractAddress: brandAddress,
-    functionName: "viewHistory",
+    functionName: "viewhistory",
     params: {
       _tokenId: tokenId,
     },
@@ -52,29 +54,60 @@ function ClaimWarrenty({ brandIndex, brandAddress, tokenId }) {
     functionName: "setHistory",
     params: {
       _tokenId: tokenId,
-      _newHistory: ipfsReturn,
+      _newhistory: ipfsReturn,
     },
   });
 
-  const updateUI = async function () {};
+  // const updateUI = async function () {};
 
-  useEffect(() => {
-    if (isWeb3Enabled) {
-      updateUI();
-    }
-  }, [isWeb3Enabled]);
+  // useEffect(() => {
+  //   if (isWeb3Enabled) {
+  //     updateUI();
+  //   }
+  // }, [isWeb3Enabled]);
+
+  const handleSuccess = async function (tx) {
+    await tx.wait(1);
+    handleNotification(tx);
+  };
+
+  const handleNotification = function (tx) {
+    dispatch({
+      type: "success",
+      message: "Our Staff Will Contact You Within 24hrs",
+      title: "Warranty Claimed",
+      position: "topR",
+      icon: "checkmark",
+    });
+  };
 
   useEffect(() => {
     async function updateHistory() {
       await setHistory({
-        onSuccess: () => console.log("success"),
+        onSuccess: handleSuccess,
         onError: (error) => {
           console.log(error);
         },
       });
     }
-    updateHistory();
+    if (ipfsReturn !== "") {
+      updateHistory();
+    }
   }, [ipfsReturn]);
+
+  useEffect(() => {
+    async function updateIpfsURL() {
+      const tempHistory = await viewhistory({
+        onError: (error) => console.log(error),
+      });
+
+      setIpfsUrl(tempHistory.toString());
+    }
+
+    if (isWeb3Enabled) {
+      updateIpfsURL();
+    }
+  }, []);
   //-----------------------------------------------------
   useEffect(() => {
     userRef.current.focus();
@@ -85,12 +118,16 @@ function ClaimWarrenty({ brandIndex, brandAddress, tokenId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (response == false) {
-        alert("Problem sending your request  :(");
-      } else if (response == true) {
-        alert("Query has been sent :)");
-        setSuccess(true);
-      }
+      // if (response == false) {
+      //   alert("Problem sending your request  :(");
+      // } else if (response == true) {
+      //   alert("Query has been sent :)");
+      //   setSuccess(true);
+      // }
+
+      const tempArr = await storeRepairHistory(ipfsURL, descp);
+      setIpfsReturn(tempArr);
+
       setDescp("");
     } catch (err) {
       /*if any error in actual res*/
@@ -100,8 +137,7 @@ function ClaimWarrenty({ brandIndex, brandAddress, tokenId }) {
 
   return (
     <div classsName="registerContainer">
-      {console.log(brandAddress)}
-      {console.log(tokenId)}
+      {console.log(ipfsURL)}
       {success ? (
         <h1>We'll let you know if the query was processed</h1>
       ) : (
@@ -131,16 +167,16 @@ function ClaimWarrenty({ brandIndex, brandAddress, tokenId }) {
             />
             <button
               disabled={!descp ? true : false}
-              onClick={async () => {
-                const tempArr = await storeRepairHistory(
-                  // "https://ipfs.moralis.io:2053/ipfs/Qmcev4tRMV6xTpiRm7PGDWpUqKjg39uGaCFfHdJMhbZ1GX",
-                  ipfsURL,
-                  descp
-                );
-                console.log(tempArr);
-                setIpfsReturn(tempArr);
-                // console.log(ipfsReturn);
-              }}
+              // onClick={async () => {
+              //   const tempArr = await storeRepairHistory(
+              //     // "https://ipfs.moralis.io:2053/ipfs/Qmcev4tRMV6xTpiRm7PGDWpUqKjg39uGaCFfHdJMhbZ1GX",
+              //     ipfsURL,
+              //     descp
+              //   );
+              //   console.log(tempArr);
+              //   setIpfsReturn(tempArr);
+              //   // console.log(ipfsReturn);
+              // }}
             >
               Send Request
             </button>

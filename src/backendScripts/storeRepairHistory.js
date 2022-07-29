@@ -1,8 +1,7 @@
 import fetch from "node-fetch";
 import Moralis from "moralis";
 import console from "console-browserify";
-// import dotenv from "dotenv";
-// dotenv.config();
+// require("dotenv").config();
 
 async function storeRepairHistory(ipfs, newRepairHistory) {
   const ipfs_url = ipfs;
