@@ -3,12 +3,6 @@ import console from "console-browserify";
 // import dotenv from "dotenv";
 // dotenv.config();
 
-// async function login() {
-//   Moralis.Web3.authenticate().then(function (user) {
-//     console.log("logged in");
-//   });
-// }
-
 async function storeData(
   name,
   imageData,

@@ -41,6 +41,9 @@ function Transfer() {
   const adminAddress =
     chainId in adminContractAddress ? adminContractAddress[chainId][0] : null;
   const brandIndex = 0;
+
+  //***********************************************************************************8 */
+
   const { runContractFunction: getBrandSmartContractAddress } = useWeb3Contract(
     {
       abi: adminABI,
@@ -49,6 +52,25 @@ function Transfer() {
       params: { index: brandIndex },
     }
   );
+
+  const { runContractFunction: viewHistory } = useWeb3Contract({
+    abi: brandsABI,
+    contractAddress: brandAddress,
+    functionName: "viewHistory",
+    params: {
+      _tokenId: tokenId,
+    },
+  });
+
+  const { runContractFunction: setHistory } = useWeb3Contract({
+    abi: brandsABI,
+    contractAddress: brandAddress,
+    functionName: "setHistory",
+    params: {
+      _tokenId: tokenId,
+      _newHistory: ipfsReturn,
+    },
+  });
 
   const updateUI = async function () {
     const tempBrandAddress = (await getBrandSmartContractAddress()).toString();
@@ -61,11 +83,29 @@ function Transfer() {
       updateUI();
     }
   }, [isWeb3Enabled]);
+
+  useEffect(() => {
+    {
+      console.log(brandAddress);
+      console.log(tokenId);
+    }
+    async function updateHistory() {
+      await setHistory({
+        onSuccess: () => console.log("success"),
+        onError: (error) => {
+          console.log(error);
+        },
+      });
+    }
+    updateHistory();
+  }, [ipfsReturn]);
   //-----------------------------------------------------
 
   useEffect(() => {
     userRef.current.focus();
   }, []);
+
+  //-----------------------------------------------------
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -130,7 +170,11 @@ function Transfer() {
             <button
               disabled={!contact || !newAdd ? true : false}
               onClick={async () => {
-                const tempArr = storeOwnerHistory(ipfsURL, newAdd);
+                const tempArr = storeOwnerHistory(
+                  // "https://ipfs.moralis.io:2053/ipfs/QmegsBtkjdjicW2RfvgcEH5VehbKwYKDZcKdpEGbxrXR1r",
+                  ipfsURL,
+                  newAdd
+                );
                 setIpfsReturn(tempArr);
                 // console.log(ipfsReturn);
               }}

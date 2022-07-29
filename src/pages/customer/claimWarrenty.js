@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import "./customer.css";
 import storeRepairHistory from "../../backendScripts/storeRepairHistory";
 import axios from "../../api/axios.js";
+import console from "console-browserify";
 
 //------------------------------------------------------------------------------------
 import { useMoralis, useWeb3Contract } from "react-moralis";
@@ -47,6 +48,25 @@ function ClaimWarrenty() {
     }
   );
 
+  const { runContractFunction: viewHistory } = useWeb3Contract({
+    abi: brandsABI,
+    contractAddress: brandAddress,
+    functionName: "viewHistory",
+    params: {
+      _tokenId: tokenId,
+    },
+  });
+
+  const { runContractFunction: setHistory } = useWeb3Contract({
+    abi: brandsABI,
+    contractAddress: brandAddress,
+    functionName: "setHistory",
+    params: {
+      _tokenId: tokenId,
+      _newHistory: ipfsReturn,
+    },
+  });
+
   const updateUI = async function () {
     const tempBrandAddress = (await getBrandSmartContractAddress()).toString();
     setBrandAddress(tempBrandAddress);
@@ -58,10 +78,28 @@ function ClaimWarrenty() {
       updateUI();
     }
   }, [isWeb3Enabled]);
+
+  useEffect(() => {
+    {
+      console.log(brandAddress);
+      console.log(tokenId);
+    }
+    async function updateHistory() {
+      await setHistory({
+        onSuccess: () => console.log("success"),
+        onError: (error) => {
+          console.log(error);
+        },
+      });
+    }
+    updateHistory();
+  }, [ipfsReturn]);
   //-----------------------------------------------------
   useEffect(() => {
     userRef.current.focus();
   }, []);
+
+  //------------------------------------------------------
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -111,7 +149,12 @@ function ClaimWarrenty() {
             <button
               disabled={!descp ? true : false}
               onClick={async () => {
-                const tempArr = storeRepairHistory(ipfsURL, descp);
+                const tempArr = await storeRepairHistory(
+                  // "https://ipfs.moralis.io:2053/ipfs/Qmcev4tRMV6xTpiRm7PGDWpUqKjg39uGaCFfHdJMhbZ1GX",
+                  ipfsURL,
+                  descp
+                );
+                console.log(tempArr);
                 setIpfsReturn(tempArr);
                 // console.log(ipfsReturn);
               }}

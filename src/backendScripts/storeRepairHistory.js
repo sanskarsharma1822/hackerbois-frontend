@@ -3,6 +3,37 @@ import Moralis from "moralis";
 // import dotenv from "dotenv";
 // dotenv.config();
 
+async function storeRepairHistory(ipfs, newRepairHistory) {
+  const ipfs_url = ipfs;
+  const res = await fetch(ipfs_url);
+  if (res.ok) {
+    const oldRepairURI = await res.json();
+    console.log(oldRepairURI);
+    var name = oldRepairURI["name"];
+    var description = oldRepairURI["description"];
+    var repairHistory = oldRepairURI["repairHistory"];
+    var image = oldRepairURI["image"];
+    var ownerHistory = oldRepairURI["ownerHistory"];
+  }
+
+  const n = new Date();
+  const date = n.toDateString();
+
+  repairHistory.push({
+    date: date,
+    "Warranty Claim": newRepairHistory,
+  });
+
+  const result = await uploadMetaData(
+    name,
+    image,
+    description,
+    ownerHistory,
+    repairHistory
+  );
+  return result;
+}
+
 async function uploadMetaData(
   name,
   image,
@@ -38,37 +69,6 @@ async function uploadMetaData(
   console.log(file.ipfs());
   // console.log(file.hash());
   return file.ipfs();
-}
-
-async function storeRepairHistory(ipfs, newRepairHistory) {
-  const ipfs_url = ipfs;
-  const res = await fetch(ipfs_url);
-  if (res.ok) {
-    const oldRepairURI = await res.json();
-    console.log(oldRepairURI);
-    var name = oldRepairURI["name"];
-    var description = oldRepairURI["description"];
-    var repairHistory = oldRepairURI["repairHistory"];
-    var image = oldRepairURI["image"];
-    var ownerHistory = oldRepairURI["ownerHistory"];
-  }
-
-  const n = new Date();
-  const date = n.toDateString();
-
-  repairHistory.push({
-    date: date,
-    "Warranty Claim": newRepairHistory,
-  });
-
-  const result = await uploadMetaData(
-    name,
-    image,
-    description,
-    ownerHistory,
-    newRepairHistory
-  );
-  return result;
 }
 
 // async function main() {
