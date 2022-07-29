@@ -39,6 +39,10 @@ nav a{
   text-decoration: none;
 }
 
+.navHeaders:hover{
+  color:rgb(107, 107, 107)
+}
+
 button{
   font-family: 'DM Sans', sans-serif;
 font-size: 18px;

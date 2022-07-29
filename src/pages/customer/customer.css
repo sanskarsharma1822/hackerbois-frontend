@@ -27,6 +27,7 @@ form {
     justify-content: space-evenly;
     flex-grow: 1;
     padding-bottom: 1rem;
+    color:white;
 }
 
 a, a:visited {
@@ -101,6 +102,11 @@ view product css
     flex-direction: column;
 align-items: center;
 width: 100%  !important;
+color:black;
+ }
+
+ .viewProd h1{
+    color:white;
  }
 
 .viewProd > *{
@@ -118,4 +124,10 @@ width: 100%  !important;
     margin: 2%;
     padding: 1%;
     border: none;
+ }
+
+ #repairTable{
+    color:white;
+    margin:100px;
+    width:50%;
  }

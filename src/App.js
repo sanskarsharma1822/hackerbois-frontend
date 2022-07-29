@@ -21,10 +21,18 @@ function App() {
         <div className="App">
           <Router>
             <nav>
-              <Link to="/">Home</Link>
-              <Link to="/admin">Admin</Link>
-              <Link to="/brand">Brand</Link>
-              <Link to="/customer">Customer</Link>
+              <Link className="navHeaders" to="/">
+                Home
+              </Link>
+              <Link className="navHeaders" to="/admin">
+                Admin
+              </Link>
+              <Link className="navHeaders" to="/brand">
+                Brand
+              </Link>
+              <Link className="navHeaders" to="/customer">
+                Customer
+              </Link>
               <ConnectWallet />
             </nav>
             <Routes>

@@ -93,13 +93,16 @@ async function uploadImage(fileInput) {
   // // const appId = process.env.APP_ID;
   // // const masterKey = process.env.MASTER_KEY;
 
-  // Moralis.start({ serverUrl, appId, masterKey });
+  Moralis.start({ serverUrl, appId, masterKey });
+
+  await Moralis.enableWeb3({ chainId: 31337 });
 
   // const web3 = await Moralis.enableWeb3();
   // const chainIdDec = await web3.eth.getChainId();
   // await Moralis.enableWeb3({ chainId: 31337 });
 
   // console.log(fileInput[0]);
+
   const data = fileInput[0];
   console.log(data);
   const file = new Moralis.File(data.name, data);

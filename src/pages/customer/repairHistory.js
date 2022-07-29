@@ -62,7 +62,7 @@ function Repair({ brandIndex, brandAddress, tokenId }) {
   // }, [setEntries]);
 
   return (
-    <div>
+    <div id="repairTable" style={{ width: "60%", margin: "0% auto" }}>
       <ReactBootstrap.Table striped bordered hover>
         <thead>
           <tr>
@@ -77,7 +77,7 @@ function Repair({ brandIndex, brandAddress, tokenId }) {
             history.map((item) => (
               <tr>
                 <td>{item.date}</td>
-                <td></td>
+                <td>{item.issue}</td>
               </tr>
             ))}
         </tbody>

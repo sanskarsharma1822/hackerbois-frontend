@@ -21,7 +21,7 @@ async function storeRepairHistory(ipfs, newRepairHistory) {
 
   repairHistory.push({
     date: date,
-    "Warranty-Claim": newRepairHistory,
+    issue: newRepairHistory,
   });
 
   const result = await uploadMetaData(
