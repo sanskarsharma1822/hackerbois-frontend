@@ -15,7 +15,7 @@ import {
 
 //------------------------------------------------------------------------------------
 
-function ClaimWarrenty() {
+function ClaimWarrenty({ brandIndex, brandAddress, tokenId }) {
   const userRef = useRef();
   const errRef = useRef();
 
@@ -28,7 +28,7 @@ function ClaimWarrenty() {
 
   //-----------------------------------------------------------
   const [ipfsReturn, setIpfsReturn] = useState();
-  const ipfsURL = "";
+  const [ipfsURL, setIpfsUrl] = useState();
   //-----------------------------------------------------------
 
   //----------------------------------------------------
@@ -38,15 +38,15 @@ function ClaimWarrenty() {
   const adminAddress =
     chainId in adminContractAddress ? adminContractAddress[chainId][0] : null;
 
-  const brandIndex = 0;
-  const { runContractFunction: getBrandSmartContractAddress } = useWeb3Contract(
-    {
-      abi: adminABI,
-      contractAddress: adminAddress,
-      functionName: "getBrandSmartContractAddress",
-      params: { index: brandIndex },
-    }
-  );
+  // const brandIndex = 0;
+  // const { runContractFunction: getBrandSmartContractAddress } = useWeb3Contract(
+  //   {
+  //     abi: adminABI,
+  //     contractAddress: adminAddress,
+  //     functionName: "getBrandSmartContractAddress",
+  //     params: { index: brandIndex },
+  //   }
+  // );
 
   const { runContractFunction: viewHistory } = useWeb3Contract({
     abi: brandsABI,

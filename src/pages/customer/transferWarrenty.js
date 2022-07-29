@@ -29,7 +29,7 @@ function Transfer() {
 
   //-----------------------------------------------------------
   const [ipfsReturn, setIpfsReturn] = useState();
-  const ipfsURL = "";
+  const [ipfsURL, setIpfsUrl] = useState();
   //-----------------------------------------------------------
 
   const response = false; //dummy variable
@@ -40,18 +40,18 @@ function Transfer() {
   const [brandAddress, setBrandAddress] = useState("");
   const adminAddress =
     chainId in adminContractAddress ? adminContractAddress[chainId][0] : null;
-  const brandIndex = 0;
+  // const brandIndex = 0;
 
   //***********************************************************************************8 */
 
-  const { runContractFunction: getBrandSmartContractAddress } = useWeb3Contract(
-    {
-      abi: adminABI,
-      contractAddress: adminAddress,
-      functionName: "getBrandSmartContractAddress",
-      params: { index: brandIndex },
-    }
-  );
+  // const { runContractFunction: getBrandSmartContractAddress } = useWeb3Contract(
+  //   {
+  //     abi: adminABI,
+  //     contractAddress: adminAddress,
+  //     functionName: "getBrandSmartContractAddress",
+  //     params: { index: brandIndex },
+  //   }
+  // );
 
   const { runContractFunction: viewHistory } = useWeb3Contract({
     abi: brandsABI,

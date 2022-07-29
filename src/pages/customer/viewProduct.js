@@ -7,17 +7,24 @@ import Transfer from "./transferWarrenty.js";
 import "./customer.css";
 import console from "console-browserify";
 //card which displays the product
-function ViewProduct(props) {
+function ViewProduct({
+  title,
+  text,
+  imgURL,
+  brandIndex,
+  brandAddress,
+  tokenId,
+}) {
   const [active, setActive] = useState("");
 
   return (
     <div className="viewProd">
       <h1>Product Information</h1>
       <Card style={{ width: "18rem" }}>
-        <Card.Img variant="top" src={props.imgURL} />
+        <Card.Img variant="top" src={imgURL} />
         <Card.Body>
-          <Card.Title>{props.title}</Card.Title>
-          <Card.Text>{props.text}</Card.Text>
+          <Card.Title>{title}</Card.Title>
+          <Card.Text>{text}</Card.Text>
           <Button variant="primary">Go somewhere</Button>
         </Card.Body>
       </Card>
@@ -28,9 +35,27 @@ function ViewProduct(props) {
           Transfer Ownership
         </button>
       </div>
-      {active === "claim" && <ClaimWarrenty brandIndex={props.index} />}
-      {active === "repair" && <Repair brandIndex={props.index} />}
-      {active === "transfer" && <Transfer brandIndex={props.index} />}
+      {active === "claim" && (
+        <ClaimWarrenty
+          brandIndex={brandIndex}
+          brandAddress={brandAddress}
+          tokenId={tokenId}
+        />
+      )}
+      {active === "repair" && (
+        <Repair
+          brandIndex={brandIndex}
+          brandAddress={brandAddress}
+          tokenId={tokenId}
+        />
+      )}
+      {active === "transfer" && (
+        <Transfer
+          brandIndex={brandIndex}
+          brandAddress={brandAddress}
+          tokenId={tokenId}
+        />
+      )}
     </div>
   );
 }
