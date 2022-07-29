@@ -274,9 +274,15 @@ function Warehouse({ brandIndex }) {
                 return (
                   <Product
                     key={one.tokenId}
-                    title={one.name}
-                    imgURL={one.image}
-                    text={one.description}
+                    tokenId={one.tokenId}
+                    brandIndex={brandIndex}
+                    brandAddress={brandAddress}
+                    name={one.name}
+                    image={one.image}
+                    serialNumber={one.serialNumber}
+                    productLink={one.productLink}
+                    description={one.description}
+                    price={one.price}
                   />
                 );
               })}

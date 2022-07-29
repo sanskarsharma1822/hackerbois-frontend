@@ -186,8 +186,8 @@ function RegisterBrand() {
 
   const handleNotification = function (tx) {
     dispatch({
-      type: "info",
-      message: "Transaction Created",
+      type: "success",
+      message: "Transaction Successful",
       title: "Brand Created",
       position: "topR",
       icon: "bell",
