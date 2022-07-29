@@ -12,10 +12,9 @@ import {
 } from "../../constants/Admin/adminConstants";
 
 import { brandsABI } from "../../constants/Brands/brandsConstant.js";
+import axios from "../../api/axios.js";
 
 function Customer() {
-  const actualAccountOwner = "0x726fA710e16d31b0Db81741fc1e97b70234a779a";
-  const currentAccount = "0x726fA710e16d31b0Db81741fc1e97b70234a779a";
   const inWarrenty = true;
 
   const userRef = useRef();
@@ -37,6 +36,10 @@ function Customer() {
   const chainId = parseInt(chainIdHex);
   const [brandIndex, setBrandIndex] = useState("0");
   const [brandAddress, setBrandAddress] = useState("");
+  const [detailURI, setDetailURI] = useState("");
+  const [text, setText] = useState("");
+  const [imgURL, setImgURL] = useState("");
+  const [title, setTitle] = useState("");
   // const brandFactoryAddress =
   //   chainId in brandFactoryContractAddress
   //     ? brandFactoryContractAddress[chainId][0]
@@ -65,6 +68,13 @@ function Customer() {
     abi: brandsABI,
     contractAddress: brandAddress,
     functionName: "isOwner",
+    params: { _tokenId: productId },
+  });
+
+  const { runContractFunction: viewTokenURI } = useWeb3Contract({
+    abi: brandsABI,
+    contractAddress: brandAddress,
+    functionName: "viewTokenURI",
     params: { _tokenId: productId },
   });
 
@@ -102,9 +112,31 @@ function Customer() {
     }
   }, [brandId]);
 
-  // useEffect(() => {
+  useEffect(() => {
+    async function updateData() {
+      const { data } = await axios.get(`${detailURI}`);
+      console.log(data);
+      const { name, image, description } = data;
+      setTitle(name);
+      setImgURL(image);
+      setText(description);
+    }
+    if (detailURI !== "") {
+      updateData();
+    }
+  }, [detailURI]);
 
-  // }, [brandAddress]);
+  useEffect(() => {
+    async function updateURI() {
+      const tempURI = await viewTokenURI({
+        onError: (error) => console.log(error),
+      });
+      setDetailURI(tempURI);
+    }
+    if (success) {
+      updateURI();
+    }
+  }, [success]);
   //------------------------------------------------------------------------
 
   useEffect(() => {
@@ -145,6 +177,7 @@ function Customer() {
           // console.log(productId);
           setSuccess(true);
         } else {
+          console.log("You are not the owner");
           setBrandId("0");
           setBrandIndex("0");
           setProductId("0");
@@ -168,9 +201,9 @@ function Customer() {
       {success ? (
         //<Link to='/dh'></Link>
         <ViewProduct
-          title="My Product"
-          text="Describe the product"
-          imgURL=""
+          title={title}
+          text={text}
+          imgURL={imgURL}
           brandIndex={brandIndex}
           brandAddress={brandAddress}
           tokenId={productId}
