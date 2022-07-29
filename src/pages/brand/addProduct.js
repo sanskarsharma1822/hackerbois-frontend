@@ -15,6 +15,7 @@ import axios from "../../api/axios.js";
 import console from "console-browserify";
 //------------------------------------------------------------------------------------
 import { useMoralis, useWeb3Contract } from "react-moralis";
+import { useNotification } from "web3uikit";
 import { brandsABI } from "../../constants/Brands/brandsConstant";
 import {
   adminABI,
@@ -27,9 +28,10 @@ const NAME_REGEX = /^[a-zA-Z0-9_.-]*$/;
 const PRICE_REGEX = /^[0-9]{1,45}$/;
 const REGISTER_URL = "/register"; //fitting url
 
-function AddProduct({ brandIndex }) {
+function AddProduct({ brandIndex, brandAddress, updateTokenCount }) {
   const userRef = useRef();
   const errRef = useRef();
+  const dispatch = useNotification();
 
   const [name, setName] = useState("");
   const [validName, setValidName] = useState(false);
@@ -62,27 +64,35 @@ function AddProduct({ brandIndex }) {
 
   //-----------------------------------------------------------
   const [ipfsReturn, setIpfsReturn] = useState(["0", "0"]);
+
+  const [max, setMax] = useState("0");
   //-----------------------------------------------------------
 
   //----------------------------------------------------
   const { isWeb3Enabled, account, chainId: chainIdHex } = useMoralis();
   const chainId = parseInt(chainIdHex);
-  const [brandAddress, setBrandAddress] = useState("");
+  // const [brandAddress, setBrandAddress] = useState("");
   const adminAddress =
     chainId in adminContractAddress ? adminContractAddress[chainId][0] : null;
 
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+
   // const brandIndex = 0;
 
-  const { runContractFunction: getBrandSmartContractAddress } = useWeb3Contract(
-    {
-      abi: adminABI,
-      contractAddress: adminAddress,
-      functionName: "getBrandSmartContractAddress",
-      params: { index: brandIndex },
-    }
-  );
+  // const { runContractFunction: getBrandSmartContractAddress } = useWeb3Contract(
+  //   {
+  //     abi: adminABI,
+  //     contractAddress: adminAddress,
+  //     functionName: "getBrandSmartContractAddress",
+  //     params: { index: brandIndex },
+  //   }
+  // );
 
-  const { runContractFunction: createCollectible } = useWeb3Contract({
+  const {
+    runContractFunction: createCollectible,
+    isFetching,
+    isLoading,
+  } = useWeb3Contract({
     abi: brandsABI,
     contractAddress: brandAddress,
     functionName: "createCollectible",
@@ -100,14 +110,38 @@ function AddProduct({ brandIndex }) {
     params: {},
   });
 
-  const [max, setMax] = useState("0");
-
   const updateUI = async function () {
-    const tempBrandAddress = (await getBrandSmartContractAddress()).toString();
-    setBrandAddress(tempBrandAddress);
-    const tempMax = await getMaxSupply();
-    setMax(tempMax.toString());
-    // ~.log(tempAdd);
+    // const tempBrandAddress = (await getBrandSmartContractAddress()).toString();
+    // setBrandAddress(tempBrandAddress);
+  };
+
+  const handleSuccess = async function (tx) {
+    await tx.wait(1);
+    updateTokenCount();
+    setButtonDisabled(false);
+    handleNotification(tx);
+    // updateUI();
+  };
+
+  const handleNotification = function (tx) {
+    dispatch({
+      type: "success",
+      message: "Transaction Successful",
+      title: "Product Created",
+      position: "topR",
+      icon: "bell",
+    });
+  };
+
+  const handleErrorNotification = function () {
+    setButtonDisabled(false);
+    dispatch({
+      type: "warning",
+      message: "Transaction Unsuccessful",
+      title: "Error Occurred",
+      position: "topR",
+      icon: "bell",
+    });
   };
 
   useEffect(() => {
@@ -118,18 +152,27 @@ function AddProduct({ brandIndex }) {
 
   useEffect(() => {
     {
-      console.log(brandAddress);
-      console.log(prodWarranty);
+      // console.log(brandAddress);
+      // console.log(prodWarranty);
     }
     async function updateCollectible() {
       await createCollectible({
-        onSuccess: () => console.log("success"),
+        onSuccess: handleSuccess,
         onError: (error) => {
           console.log(error);
+          handleErrorNotification();
         },
       });
+
+      // const temp = await getMaxSupply({
+      //   onSuccess: () => console.log("success"),
+      //   onError: (error) => console.log(error),
+      // });
+      // setMax(temp);
     }
-    updateCollectible();
+    if (ipfsReturn[0] !== "0" && ipfsReturn[1] !== "0") {
+      updateCollectible();
+    }
   }, [ipfsReturn]);
   //-----------------------------------------------------
   //whenever the thing in the bracket(dependency array) changes this useEffect will be called again
@@ -196,8 +239,11 @@ function AddProduct({ brandIndex }) {
 
   return (
     <div classsName="newProd">
-      {console.log(max)}
+      {/* {console.log(max)} */}
       {/* {console.log(ipfsReturn)} */}
+      {/* {console.log(brandIndex)}
+      {console.log(brandAddress)} */}
+      {/* {console.log(max.toString())} */}
       {/*if registration of product was successful -> go to warehouse */}
       {success ? (
         //send info to db
@@ -324,9 +370,18 @@ function AddProduct({ brandIndex }) {
           />
 
           <button
-            disabled={!validName || !validPrice ? true : false}
+            disabled={
+              !validName ||
+              !validPrice ||
+              isFetching ||
+              isLoading ||
+              buttonDisabled
+                ? true
+                : false
+            }
             onClick={async () => {
               // return(await login();
+              setButtonDisabled(true);
               const tempArr = await storeData(
                 name,
                 imgURL,

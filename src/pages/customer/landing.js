@@ -11,6 +11,8 @@ import {
   adminContractAddress,
 } from "../../constants/Admin/adminConstants";
 
+import { brandsABI } from "../../constants/Brands/brandsConstant.js";
+
 function Customer() {
   const actualAccountOwner = "0x726fA710e16d31b0Db81741fc1e97b70234a779a";
   const currentAccount = "0x726fA710e16d31b0Db81741fc1e97b70234a779a";
@@ -22,7 +24,7 @@ function Customer() {
   const [brandId, setBrandId] = useState("0");
   const [BrandIdFocus, setBrandIdFocus] = useState(false);
 
-  const [productId, setProductId] = useState("");
+  const [productId, setProductId] = useState("0");
   const [productIdFocus, setProductIdFocus] = useState(false);
 
   const [errMsg, setErrMsg] = useState("");
@@ -34,6 +36,7 @@ function Customer() {
   // const dispatch = useNotification();
   const chainId = parseInt(chainIdHex);
   const [brandIndex, setBrandIndex] = useState("0");
+  const [brandAddress, setBrandAddress] = useState("");
   // const brandFactoryAddress =
   //   chainId in brandFactoryContractAddress
   //     ? brandFactoryContractAddress[chainId][0]
@@ -49,18 +52,59 @@ function Customer() {
     params: { id: brandId },
   });
 
-  const updateUI = async function () {
-    const tempIndex = await getBrandIndexFromID({
-      onError: (error) => console.log(error),
-    });
+  const { runContractFunction: getBrandSmartContractAddress } = useWeb3Contract(
+    {
+      abi: adminABI,
+      contractAddress: adminAddress,
+      functionName: "getBrandSmartContractAddress",
+      params: { index: brandIndex },
+    }
+  );
 
-    setBrandIndex(tempIndex.toString());
+  const { runContractFunction: isOwner } = useWeb3Contract({
+    abi: brandsABI,
+    contractAddress: brandAddress,
+    functionName: "isOwner",
+    params: { _tokenId: productId },
+  });
+
+  const updateUI = async function () {
+    if (brandId !== "") {
+      const tempIndex = await getBrandIndexFromID({
+        onError: (error) => console.log(error),
+      });
+
+      setBrandIndex(tempIndex.toString());
+    }
+  };
+  const updateAddress = async function () {
+    const tempBrandAddress = (await getBrandSmartContractAddress()).toString();
+    setBrandAddress(tempBrandAddress);
   };
   useEffect(() => {
     if (isWeb3Enabled) {
       updateUI();
     }
   }, [isWeb3Enabled]);
+
+  useEffect(() => {
+    if (brandIndex !== "0") {
+      updateAddress();
+    }
+    if (brandIndex === "0") {
+      setBrandAddress("");
+    }
+  }, [brandIndex]);
+
+  useEffect(() => {
+    if (brandId !== "0") {
+      updateUI();
+    }
+  }, [brandId]);
+
+  // useEffect(() => {
+
+  // }, [brandAddress]);
   //------------------------------------------------------------------------
 
   useEffect(() => {
@@ -71,15 +115,39 @@ function Customer() {
     e.preventDefault();
     try {
       //get response  (actual owner address and warrenty period)
-      if (actualAccountOwner != currentAccount) {
-        alert("You are not the owner");
-      } else if (inWarrenty == false) {
-        alert("You are the Owner! But Warrenty has expired");
+      // if (actualAccountOwner != currentAccount) {
+      //   alert("You are not the owner");
+      // } else if (inWarrenty == false) {
+      //   alert("You are the Owner! But Warrenty has expired");
+      // }
+      // //alert("You are the Owner! But Warrenty has expired")
+      // if (actualAccountOwner == currentAccount && inWarrenty) setSuccess(true);
+      // setBrandId("");
+      // setProductId("");
+      // if (brandAddress !== "") {
+
+      // const temp = await isOwner({
+      //   onError: (error) => console.log(error),
+      // });
+      // if (temp == true) {
+      //   console.log("You are the owner");
+      // } else {
+      //   console.log("You are no longer the owner");
+      // }
+      if (brandAddress === "") {
+        console.log("Brand ID doesn't exist");
+      } else {
+        const tempBool = await isOwner({
+          onError: (error) => console.log(error),
+        });
+        if (tempBool) console.log("You are the owner");
+        else console.log("You are not the owner");
+        setBrandId("0");
+        setBrandIndex("0");
+        setProductId("0");
+        setSuccess(true);
       }
-      //alert("You are the Owner! But Warrenty has expired")
-      if (actualAccountOwner == currentAccount && inWarrenty) setSuccess(true);
-      setBrandId("");
-      setProductId("");
+      // }
     } catch (err) {
       /*
       /*if (!err?.response) {
@@ -100,7 +168,9 @@ function Customer() {
           title="My Product"
           text="Describe the product"
           imgURL=""
-          index={brandIndex}
+          brandIndex={brandIndex}
+          brandAddress={brandAddress}
+          tokeId={productId}
         />
       ) : (
         <section>
@@ -143,9 +213,11 @@ function Customer() {
             />
             <button
               disabled={!brandId || !productId ? true : false}
-              onClick={async () => {
-                updateUI();
-              }}
+              // onClick={async () => {
+              //   await isOwner({
+              //     onError : (error)=>console.log(error)
+              //   })
+              // }}
             >
               Check
             </button>

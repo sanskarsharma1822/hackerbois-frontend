@@ -13,7 +13,6 @@ function ViewProduct(props) {
   return (
     <div className="viewProd">
       <h1>Product Information</h1>
-      {console.log(props.index)}
       <Card style={{ width: "18rem" }}>
         <Card.Img variant="top" src={props.imgURL} />
         <Card.Body>

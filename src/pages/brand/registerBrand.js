@@ -174,8 +174,8 @@ function RegisterBrand() {
 
     setBrandIndex(tempIndex.toString());
     setBrandID(tempBrandID.toString());
-    console.log(brandID);
-    console.log(brandIndex);
+    // console.log(brandID);
+    // console.log(brandIndex);
   };
 
   const handleSuccess = async function (tx) {
@@ -186,8 +186,8 @@ function RegisterBrand() {
 
   const handleNotification = function (tx) {
     dispatch({
-      type: "info",
-      message: "Transaction Created",
+      type: "success",
+      message: "Transaction Successful",
       title: "Brand Created",
       position: "topR",
       icon: "bell",

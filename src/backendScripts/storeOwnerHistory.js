@@ -1,5 +1,6 @@
 import fetch from "node-fetch";
 import Moralis from "moralis";
+import console from "console-browserify";
 // import dotenv from "dotenv";
 // dotenv.config();
 
