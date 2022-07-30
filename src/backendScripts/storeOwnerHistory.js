@@ -18,9 +18,6 @@ async function uploadMetaData(
   const serverUrl = process.env.SERVER_URL;
   const appId = process.env.APP_ID;
   const masterKey = process.env.MASTER_KEY;
-  // const serverUrl = "https://6zdkjezjlhyg.usemoralis.com:2053/server";
-  // const appId = "Y0jqmKUvI8GEPpBzlWwcKIiTVk89Wt1FuleTEHZE";
-  // const masterKey = "X2rHNLeuDD658Dn1xOWqPa8hp86EK6JKyYnMsmbC";
 
   Moralis.start({ serverUrl, appId, masterKey });
 
