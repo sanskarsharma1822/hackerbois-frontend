@@ -125,7 +125,7 @@ function ClaimWarrenty({ brandIndex, brandAddress, tokenId }) {
       //   setSuccess(true);
       // }
 
-      const tempArr = await storeRepairHistory(ipfsURL, descp);
+      const tempArr = await storeRepairHistory(ipfsURL, descp, chainId);
       setIpfsReturn(tempArr);
 
       setDescp("");

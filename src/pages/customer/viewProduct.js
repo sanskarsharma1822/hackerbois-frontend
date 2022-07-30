@@ -12,6 +12,7 @@ function ViewProduct({
   text,
   imgURL,
   brandIndex,
+  brandId,
   brandAddress,
   tokenId,
 }) {
@@ -52,6 +53,7 @@ function ViewProduct({
       {active === "transfer" && (
         <Transfer
           brandIndex={brandIndex}
+          brandId={brandId}
           brandAddress={brandAddress}
           tokenId={tokenId}
         />

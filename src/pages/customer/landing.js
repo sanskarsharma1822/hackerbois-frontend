@@ -205,6 +205,7 @@ function Customer() {
           text={text}
           imgURL={imgURL}
           brandIndex={brandIndex}
+          brandId={brandId}
           brandAddress={brandAddress}
           tokenId={productId}
         />

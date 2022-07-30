@@ -1,5 +1,6 @@
 import Moralis from "moralis";
 import console from "console-browserify";
+import { useMoralis } from "react-moralis";
 // import dotenv from "dotenv";
 // dotenv.config();
 
@@ -9,20 +10,23 @@ async function storeData(
   serialNumber,
   productLink,
   description,
-  price
+  price,
+  chainId
 ) {
-  console.log("You are here");
   // MORALIS VARIABLES TO BE STORED IN ENV
 
-  // const serverUrl = process.env.SERVER_URL;
-  // const appId = process.env.APP_ID;
-  // const masterKey = process.env.MASTER_KEY;
+  const serverUrl = process.env.SERVER_URL;
+  const appId = process.env.APP_ID;
+  const masterKey = process.env.MASTER_KEY;
+  // const serverUrl = "https://6zdkjezjlhyg.usemoralis.com:2053/server";
+  // const appId = "Y0jqmKUvI8GEPpBzlWwcKIiTVk89Wt1FuleTEHZE";
+  // const masterKey = "X2rHNLeuDD658Dn1xOWqPa8hp86EK6JKyYnMsmbC";
 
   Moralis.start({ serverUrl, appId, masterKey });
 
   // const web3 = await Moralis.enableWeb3();
   // const chainIdDec = await web3.eth.getChainId();
-  await Moralis.enableWeb3({ chainId: 31337 });
+  await Moralis.enableWeb3({ chainId: chainId });
   // await Moralis.enableWeb3({ chainId: 31337 });
 
   const image = await uploadImage(imageData);
@@ -89,9 +93,12 @@ async function storeHistory(image) {
 }
 
 async function uploadImage(fileInput) {
-  // // const serverUrl = process.env.SERVER_URL;
-  // // const appId = process.env.APP_ID;
-  // // const masterKey = process.env.MASTER_KEY;
+  const serverUrl = process.env.SERVER_URL;
+  const appId = process.env.APP_ID;
+  const masterKey = process.env.MASTER_KEY;
+  // const serverUrl = "https://6zdkjezjlhyg.usemoralis.com:2053/server";
+  // const appId = "Y0jqmKUvI8GEPpBzlWwcKIiTVk89Wt1FuleTEHZE";
+  // const masterKey = "X2rHNLeuDD658Dn1xOWqPa8hp86EK6JKyYnMsmbC";
 
   // Moralis.start({ serverUrl, appId, masterKey });
 

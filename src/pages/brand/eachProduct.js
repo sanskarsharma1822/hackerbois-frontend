@@ -24,6 +24,7 @@ function Product({
 
   const [newAddress, setNewAddress] = useState("");
   const [owner, setOwner] = useState("");
+  const [val, setVal] = useState("");
 
   const {
     runContractFunction: transferToken,
@@ -43,10 +44,21 @@ function Product({
     params: { _tokenId: tokenId },
   });
 
+  const { runContractFunction: validityPeriod } = useWeb3Contract({
+    abi: brandsABI,
+    contractAddress: brandAddress,
+    functionName: "validityPeriod",
+    params: { _tokenId: tokenId },
+  });
+
   const updateIsOwner = async function () {
     const tempOwner = await isOwner({
       onError: (error) => console.log(error),
     });
+    const tempValidityPeriod = await validityPeriod({
+      onError: (error) => console.log(error),
+    });
+    setVal(tempValidityPeriod);
     setOwner(tempOwner);
   };
 
@@ -82,6 +94,7 @@ function Product({
             <div>{description}</div>
             <div>{productLink}</div>
             <div>{price}</div>
+            {val !== "" && <div>{val}</div>}
           </Card.Text>
           {owner ? (
             <div>

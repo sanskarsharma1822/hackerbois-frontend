@@ -15,9 +15,11 @@ import {
 
 import { useNotification } from "web3uikit";
 
+import sendMessage from "../../backendScripts/sendMessage";
+
 //------------------------------------------------------------------------------------
 
-function Transfer({ brandIndex, brandAddress, tokenId }) {
+function Transfer({ brandIndex, brandId, brandAddress, tokenId }) {
   const userRef = useRef();
   const errRef = useRef();
   const dispatch = useNotification();
@@ -89,6 +91,7 @@ function Transfer({ brandIndex, brandAddress, tokenId }) {
 
   const handleSuccess = async function (tx) {
     await tx.wait(1);
+    sendMessage(contact, tokenId, brandId);
     handleNotification(tx);
   };
 
@@ -138,7 +141,7 @@ function Transfer({ brandIndex, brandAddress, tokenId }) {
     e.preventDefault();
     try {
       const updateStoreOwner = async () => {
-        const tempArr = storeOwnerHistory(ipfsURL, newAdd);
+        const tempArr = storeOwnerHistory(ipfsURL, newAdd, chainId);
         setIpfsReturn(tempArr);
       };
       updateStoreOwner();

@@ -21,7 +21,8 @@ import {
   adminABI,
   adminContractAddress,
 } from "../../constants/Admin/adminConstants";
-import { getSpaceUntilMaxLength } from "@testing-library/user-event/dist/utils";
+
+import sendMessage from "../../backendScripts/sendMessage";
 
 //------------------------------------------------------------------------------------
 const NAME_REGEX = /^[a-zA-Z0-9_.-]*$/;
@@ -120,6 +121,7 @@ function AddProduct({ brandIndex, brandAddress, updateTokenCount }) {
     updateTokenCount();
     setButtonDisabled(false);
     handleNotification(tx);
+
     // updateUI();
   };
 
@@ -388,7 +390,8 @@ function AddProduct({ brandIndex, brandAddress, updateTokenCount }) {
                 serialNo,
                 prodLink,
                 descp,
-                price
+                price,
+                chainId
               );
               // console.log(tempArr[0]);
               // console.log(tempArr[1]);
