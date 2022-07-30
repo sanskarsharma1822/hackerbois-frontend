@@ -103,32 +103,30 @@ function Product({
           </Card.Text>
           {owner ? (
             <div>
-              <div>
-                <label>Transfer To : </label>
-                <input
-                  type="text"
-                  value={newAddress}
-                  onChange={(e) => setNewAddress(e.target.value)}
-                  required
-                />
-                {/* </div>
-              <div> */}
-                <Button
-                  variant="primary"
-                  disabled={isFetching || isLoading ? true : false}
-                  onClick={async () => {
-                    await transferToken({
-                      onSuccess: handleSuccess,
-                      onError: (error) => console.log(error),
-                    });
-                  }}
-                >
-                  Transfer
-                </Button>
-              </div>
+              <label>Transfer To : </label>
+              <br></br>
+              <input
+                type="text"
+                value={newAddress}
+                style={{ width: "50%" }}
+                onChange={(e) => setNewAddress(e.target.value)}
+                required
+              />
+              <Button
+                variant="primary"
+                disabled={isFetching || isLoading ? true : false}
+                onClick={async () => {
+                  await transferToken({
+                    onSuccess: handleSuccess,
+                    onError: (error) => console.log(error),
+                  });
+                }}
+              >
+                Transfer
+              </Button>
             </div>
           ) : (
-            <div>NFT has already been transfered</div>
+            <div style={{ color: "red" }}>NFT has already been transfered</div>
           )}
         </Card.Body>
       </Card>

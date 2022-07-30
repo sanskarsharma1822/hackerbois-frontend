@@ -15,7 +15,7 @@ import {
 
 import { useNotification } from "web3uikit";
 
-import sendMessage from "../../backendScripts/sendMessage";
+// import sendMessage from "../../backendScripts/sendMessage";
 
 //------------------------------------------------------------------------------------
 
@@ -92,7 +92,7 @@ function Transfer({ brandIndex, brandId, brandAddress, tokenId }) {
 
   const handleSuccess = async function (tx) {
     await tx.wait(1);
-    sendMessage(contact, tokenId, brandId);
+    // sendMessage(contact, tokenId, brandId);
     handleNotification(tx);
   };
 
