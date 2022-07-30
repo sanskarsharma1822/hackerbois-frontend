@@ -131,18 +131,18 @@ function AddProduct({ brandIndex, brandAddress, updateTokenCount }) {
       message: "Transaction Successful",
       title: "Product Created",
       position: "topR",
-      icon: "bell",
+      icon: "checkmark",
     });
   };
 
   const handleErrorNotification = function () {
     setButtonDisabled(false);
     dispatch({
-      type: "warning",
+      type: "error",
       message: "Transaction Unsuccessful",
       title: "Error Occurred",
       position: "topR",
-      icon: "bell",
+      icon: "xCircle",
     });
   };
 
@@ -244,8 +244,10 @@ function AddProduct({ brandIndex, brandAddress, updateTokenCount }) {
       {/* {console.log(max)} */}
       {/* {console.log(ipfsReturn)} */}
       {/* {console.log(brandIndex)}
-      {console.log(brandAddress)} */}
+     {console.log(brandAddress)} 
       {/* {console.log(max.toString())} */}
+      {console.log(brandAddress)}
+      {console.log(brandIndex)}
       {/*if registration of product was successful -> go to warehouse */}
       {success ? (
         //send info to db

@@ -81,13 +81,21 @@ function ClaimWarrenty({ brandIndex, brandAddress, tokenId }) {
     });
   };
 
+  const handleErrorNotification = function (tx) {
+    dispatch({
+      type: "error",
+      message: "Our Staff Will Contact You Within 24hrs",
+      title: "Warranty Claimed",
+      position: "topR",
+      icon: "info",
+    });
+  };
+
   useEffect(() => {
     async function updateHistory() {
       await setHistory({
         onSuccess: handleSuccess,
-        onError: (error) => {
-          console.log(error);
-        },
+        onError: handleErrorNotification,
       });
     }
     if (ipfsReturn !== "") {

@@ -102,14 +102,24 @@ function Transfer({ brandIndex, brandId, brandAddress, tokenId }) {
       message: `Warranty transferred to ${newAdd}`,
       title: "Transfer Success",
       position: "topR",
-      icon: "bell",
+      icon: "checkmark",
+    });
+  };
+
+  const handleErrorNotification = function (tx) {
+    dispatch({
+      type: "error",
+      message: `Something Went Wrong`,
+      title: "Transfer Unsuccessful",
+      position: "topR",
+      icon: "info",
     });
   };
 
   const transfer = async function () {
     await transferToken({
       onSuccess: handleSuccess,
-      onError: (error) => console.log(error),
+      onError: handleErrorNotification,
     });
   };
 
