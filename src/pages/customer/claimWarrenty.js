@@ -149,7 +149,7 @@ function ClaimWarrenty({ brandIndex, brandAddress, tokenId }) {
           >
             {errMsg}
           </p>
-          <h1>Claim Warrenty</h1>
+          <h1>Claim Warranty</h1>
           <form onSubmit={handleSubmit}>
             <label htmlFor="descp">Describe your issue:</label>
             <input
@@ -181,14 +181,6 @@ function ClaimWarrenty({ brandIndex, brandAddress, tokenId }) {
               Send Request
             </button>
           </form>
-          <p>
-            Already registered?
-            <br />
-            <span className="line">
-              {/*put router link here*/}
-              <a href="#">Sign In</a>
-            </span>
-          </p>
         </section>
       )}
     </div>

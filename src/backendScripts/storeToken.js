@@ -100,13 +100,16 @@ async function uploadImage(fileInput) {
   // const appId = "Y0jqmKUvI8GEPpBzlWwcKIiTVk89Wt1FuleTEHZE";
   // const masterKey = "X2rHNLeuDD658Dn1xOWqPa8hp86EK6JKyYnMsmbC";
 
-  // Moralis.start({ serverUrl, appId, masterKey });
+  Moralis.start({ serverUrl, appId, masterKey });
+
+  await Moralis.enableWeb3({ chainId: 31337 });
 
   // const web3 = await Moralis.enableWeb3();
   // const chainIdDec = await web3.eth.getChainId();
   // await Moralis.enableWeb3({ chainId: 31337 });
 
   // console.log(fileInput[0]);
+
   const data = fileInput[0];
   console.log(data);
   const file = new Moralis.File(data.name, data);

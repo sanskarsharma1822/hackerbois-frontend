@@ -248,6 +248,8 @@ function Customer() {
               onFocus={() => setProductIdFocus(true)}
               onBlur={() => setProductIdFocus(false)}
             />
+            <br></br>
+            <br></br>
             <button
               disabled={!brandId || !productId ? true : false}
               // onClick={async () => {

@@ -21,16 +21,19 @@ function ViewProduct({
   return (
     <div className="viewProd">
       <h1>Product Information</h1>
-      <Card style={{ width: "18rem" }}>
-        <Card.Img variant="top" src={imgURL} />
+      <Card style={{ width: "18rem", height: "50vh" }}>
+        <Card.Img
+          variant="top"
+          src={imgURL}
+          style={{ objectFit: "cover", height: "20vh" }}
+        />
         <Card.Body>
           <Card.Title>{title}</Card.Title>
           <Card.Text>{text}</Card.Text>
-          <Button variant="primary">Go somewhere</Button>
         </Card.Body>
       </Card>
       <div className="btns">
-        <button onClick={() => setActive("claim")}>Claim Warrenty</button>
+        <button onClick={() => setActive("claim")}>Claim Warranty</button>
         <button onClick={() => setActive("repair")}>Repair History</button>
         <button onClick={() => setActive("transfer")}>
           Transfer Ownership

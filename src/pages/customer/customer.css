@@ -6,18 +6,19 @@
     
   }
 .registerContainer section{
-    background: rgb(73,73,188);
-    background: linear-gradient(90deg, rgba(73,73,188,1) 35%, rgba(98,228,255,1) 100%);
+    /* background: rgb(73,73,188);
+    background: linear-gradient(90deg, rgba(73,73,188,1) 35%, rgba(98,228,255,1) 100%); */
    /*margin: 3%;*/
    max-width: 30%;
    /* max-height: 100% !important;
     max-width: 420px;
     min-height: 400px;*/
+    margin: 0% auto;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     padding: 1rem;
-    background-color:khaki;
+    /* background-color:khaki; */
 }
 
 form {
@@ -26,6 +27,7 @@ form {
     justify-content: space-evenly;
     flex-grow: 1;
     padding-bottom: 1rem;
+    color:white;
 }
 
 a, a:visited {
@@ -100,6 +102,11 @@ view product css
     flex-direction: column;
 align-items: center;
 width: 100%  !important;
+color:black;
+ }
+
+ .viewProd h1{
+    color:white;
  }
 
 .viewProd > *{
@@ -117,4 +124,10 @@ width: 100%  !important;
     margin: 2%;
     padding: 1%;
     border: none;
+ }
+
+ #repairTable{
+    color:white;
+    margin:100px;
+    width:50%;
  }

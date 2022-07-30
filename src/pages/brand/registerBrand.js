@@ -233,7 +233,7 @@ function RegisterBrand() {
         //<Link to='/dh'></Link>
         <Warehouse brandIndex={brandIndex} />
       ) : (
-        <section>
+        <section className="regSection">
           <p
             ref={errRef}
             className={errMsg ? "errmsg" : "offscreen"}
@@ -243,7 +243,8 @@ function RegisterBrand() {
           </p>
           <h1>Register Brand</h1>
           {/* <form onSubmit={handleSubmit}> */}
-          <label htmlFor="name">Brand Name:</label>
+          <br></br>
+          <label htmlFor="name">Brand Name : </label>
           <input
             type="text"
             id="name"
@@ -263,7 +264,8 @@ function RegisterBrand() {
                             Must begin with a letter.<br />
                             Letters, numbers, underscores, hyphens allowed.
             </p>*/}
-          <label htmlFor="email">Email:</label>
+          <hr></hr>
+          <label htmlFor="email">Email : </label>
           <input
             type="email"
             id="email"
@@ -280,7 +282,8 @@ function RegisterBrand() {
                             <FontAwesomeIcon icon={faInfoCircle} />
                             Price should be a Number 
         </p>*/}
-          <label htmlFor="id">Brand ID:</label>
+          <hr></hr>
+          <label htmlFor="id">Brand ID : </label>
           <input
             type="text"
             id="id"
@@ -294,7 +297,8 @@ function RegisterBrand() {
             onFocus={() => setIdFocus(true)}
             onBlur={() => setIdFocus(false)}
           />
-          <label htmlfor="pack">Select a Warrenty Pack:</label>
+          <hr></hr>
+          <label htmlfor="pack">Select a Warrenty Pack : </label>
           <select
             id="pack"
             name="pack"
@@ -306,6 +310,7 @@ function RegisterBrand() {
             <option value="2">60 Days</option>
             <option value="3">90 Days</option>
           </select>
+          <hr></hr>
           <button
             disabled={!name || !email || !id || !warrenty ? true : false}
             onClick={async () => {

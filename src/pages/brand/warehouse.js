@@ -220,8 +220,9 @@ function Warehouse({ brandIndex }) {
       {/* {console.log(numOfTokens)} */}
       {/* {console.log(finalArr)} */}
       {/* {console.log(numOfTokens)} */}
+      <h1>Welcome to Warehouse</h1>
+
       <section className="head">
-        <h1>Welcome to Warehouse</h1>
         <div>
           <button
             onClick={() => (showForm ? setShowForm(false) : setShowForm(true))}
@@ -229,31 +230,36 @@ function Warehouse({ brandIndex }) {
             Add New Product
           </button>
         </div>
-        <label htmlfor="pack">Select a Warrenty Pack:</label>
-        <select
-          id="pack"
-          name="pack"
-          onChange={(e) => setWarrantyAdded(e.target.value)}
-          value={warrantyAdded}
-          required
-        >
-          <option value="1">30 Days</option>
-          <option value="2">60 Days</option>
-          <option value="3">90 Days</option>
-        </select>
         <div>
-          <button
-            onClick={async () => {
-              await extendWarranty({
-                onSuccess: () => console.log("success"),
-                onError: (error) => console.log(error),
-              });
-            }}
-          >
-            Extend Warranty
-          </button>
+          <div>
+            <label htmlfor="pack">
+              <h4>Select a Warranty Pack : </h4>
+            </label>
+            <select
+              id="pack"
+              name="pack"
+              onChange={(e) => setWarrantyAdded(e.target.value)}
+              value={warrantyAdded}
+              required
+            >
+              <option value="1">30 Days</option>
+              <option value="2">60 Days</option>
+              <option value="3">90 Days</option>
+            </select>
+            <button
+              onClick={async () => {
+                await extendWarranty({
+                  onSuccess: () => console.log("success"),
+                  onError: (error) => console.log(error),
+                });
+              }}
+            >
+              Extend Warranty
+            </button>
+            <br></br>
+            <h6>Warranty left : {brandWarrantyLeft} days</h6>
+          </div>
         </div>
-        <div>{brandWarrantyLeft}</div>
       </section>
       <section>
         {showForm ? (
@@ -264,7 +270,7 @@ function Warehouse({ brandIndex }) {
             updateTokenCount={updateNumberOfTokens}
           />
         ) : (
-          <h3>Your Products</h3>
+          <h1>Your Products</h1>
         )}
         <div className="cards-outer">
           <section className="cards">

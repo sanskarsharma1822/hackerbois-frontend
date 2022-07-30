@@ -85,16 +85,21 @@ function Product({
   };
 
   return (
-    <div>
-      <Card style={{ width: "18rem" }}>
-        <Card.Img variant="top" src={image} />
+    <div class="everyProduct">
+      <Card style={{ width: "18rem", height: "60vh" }}>
+        <Card.Img
+          variant="top"
+          src={image}
+          style={{ objectFit: "cover", height: "20vh" }}
+        />
         <Card.Body>
-          <Card.Title>{name}</Card.Title>
+          <Card.Title id="nameProduct">{name}</Card.Title>
           <Card.Text>
-            <div>{description}</div>
-            <div>{productLink}</div>
-            <div>{price}</div>
-            {val !== "" && <div>{val}</div>}
+            <div id="description">{description}</div>
+            <a id="productLink" href={productLink} target="blank">
+              Link
+            </a>
+            <div>Price - {price}</div>
           </Card.Text>
           {owner ? (
             <div>
@@ -106,8 +111,8 @@ function Product({
                   onChange={(e) => setNewAddress(e.target.value)}
                   required
                 />
-              </div>
-              <div>
+                {/* </div>
+              <div> */}
                 <Button
                   variant="primary"
                   disabled={isFetching || isLoading ? true : false}

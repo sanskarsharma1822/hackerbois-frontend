@@ -13,6 +13,33 @@
     background: linear-gradient(30deg, rgba(126,9,172,0.9756945014333859) 0%, rgba(33,154,236,1) 100%);
 
 }*/
+.table-container{
+    margin:5% 20%;
+    height:60vh;
+    position: relative;
+}
+
+.table-container button{
+    bottom:5%;
+    right:0%;
+    position: absolute;
+    float: right;   
+}
+
+button{
+    font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  padding: 12px 32px;
+  margin: 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  /* border-radius: 50px; */
+}
+
+button :hover{
+    box-shadow: rgba(var(--primary-color), 0.5) 0px 0px 20px 0px;
+}
 
 th, td{
     color:white;
