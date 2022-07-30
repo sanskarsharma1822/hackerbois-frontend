@@ -13,9 +13,9 @@ async function uploadMetaData(
 ) {
   // MORALIS VARIABLES TO BE STORED IN ENV
 
-  // const serverUrl = process.env.SERVER_URL;
-  // const appId = process.env.APP_ID;
-  // const masterKey = process.env.MASTER_KEY;
+  const serverUrl = process.env.SERVER_URL;
+  const appId = process.env.APP_ID;
+  const masterKey = process.env.MASTER_KEY;
 
   Moralis.start({ serverUrl, appId, masterKey });
 

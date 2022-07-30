@@ -53,15 +53,15 @@ function Transfer({ brandIndex, brandAddress, tokenId }) {
     },
   });
 
-  const { runContractFunction: setHistory } = useWeb3Contract({
-    abi: brandsABI,
-    contractAddress: brandAddress,
-    functionName: "setHistory",
-    params: {
-      _tokenId: tokenId,
-      _newhistory: ipfsReturn,
-    },
-  });
+  // const { runContractFunction: setHistory } = useWeb3Contract({
+  //   abi: brandsABI,
+  //   contractAddress: brandAddress,
+  //   functionName: "setHistory",
+  //   params: {
+  //     _tokenId: tokenId,
+  //     _newhistory: ipfsReturn,
+  //   },
+  // });
 
   const { runContractFunction: transferToken } = useWeb3Contract({
     abi: brandsABI,
@@ -70,6 +70,7 @@ function Transfer({ brandIndex, brandAddress, tokenId }) {
     params: {
       _sendTo: newAdd,
       _tokenId: tokenId,
+      _newHistory: ipfsReturn,
     },
   });
 
@@ -112,10 +113,10 @@ function Transfer({ brandIndex, brandAddress, tokenId }) {
   useEffect(() => {
     console.log("updating");
     async function updateHistory() {
-      await setHistory({
+      await transferToken({
         onSuccess: () => {
           console.log("success ipfs");
-          transfer();
+          // transfer();
         },
         onError: (error) => {
           console.log(error);
