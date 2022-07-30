@@ -17,7 +17,7 @@ import { ethers } from "ethers";
 import { Moralis } from "moralis";
 //------------------------------------------------------
 
-function Warehouse({ brandIndex }) {
+function Warehouse({ brandIndex, brandId }) {
   const [products, setProducts] = useState({ items: [] });
   const [showForm, setShowForm] = useState(false);
 
@@ -282,6 +282,7 @@ function Warehouse({ brandIndex }) {
                     key={one.tokenId}
                     tokenId={one.tokenId}
                     brandIndex={brandIndex}
+                    brandId={brandId}
                     brandAddress={brandAddress}
                     name={one.name}
                     image={one.image}

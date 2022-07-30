@@ -13,12 +13,14 @@ import {
 
 import { brandsABI } from "../../constants/Brands/brandsConstant.js";
 import axios from "../../api/axios.js";
+import { useNotification } from "web3uikit";
 
 function Customer() {
   const inWarrenty = true;
 
   const userRef = useRef();
   const errRef = useRef();
+  const dispatch = useNotification();
 
   const [brandId, setBrandId] = useState("0");
   const [BrandIdFocus, setBrandIdFocus] = useState(false);
@@ -68,6 +70,13 @@ function Customer() {
     abi: brandsABI,
     contractAddress: brandAddress,
     functionName: "isOwner",
+    params: { _tokenId: productId },
+  });
+
+  const { runContractFunction: isNFTDecayed } = useWeb3Contract({
+    abi: brandsABI,
+    contractAddress: brandAddress,
+    functionName: "isNFTDecayed",
     params: { _tokenId: productId },
   });
 
@@ -143,44 +152,72 @@ function Customer() {
     userRef.current.focus();
   }, []);
 
+  const handleIncorrectBrandIdNotification = () => {
+    dispatch({
+      type: "error",
+      title: "Invalid Brand ID",
+      position: "topR",
+      icon: "info",
+    });
+  };
+
+  const handleNFTDecayedNotification = () => {
+    dispatch({
+      type: "error",
+      title: "Warranty Has Ended",
+      position: "topR",
+      icon: "info",
+    });
+  };
+
+  const handleNotOwnerNotification = () => {
+    dispatch({
+      type: "error",
+      title: "You are not the owner",
+      position: "topR",
+      icon: "info",
+    });
+  };
+
+  const handleLoginSuccessNotification = () => {
+    dispatch({
+      type: "success",
+      title: "Login Successful",
+      position: "topR",
+      icon: "checkmark",
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      //get response  (actual owner address and warrenty period)
-      // if (actualAccountOwner != currentAccount) {
-      //   alert("You are not the owner");
-      // } else if (inWarrenty == false) {
-      //   alert("You are the Owner! But Warrenty has expired");
-      // }
-      // //alert("You are the Owner! But Warrenty has expired")
-      // if (actualAccountOwner == currentAccount && inWarrenty) setSuccess(true);
-      // setBrandId("");
-      // setProductId("");
-      // if (brandAddress !== "") {
-
-      // const temp = await isOwner({
-      //   onError: (error) => console.log(error),
-      // });
-      // if (temp == true) {
-      //   console.log("You are the owner");
-      // } else {
-      //   console.log("You are no longer the owner");
-      // }
       if (brandAddress === "") {
-        console.log("Brand ID doesn't exist");
+        handleIncorrectBrandIdNotification();
+        setBrandId("0");
+        setBrandIndex("0");
+        setProductId("0");
       } else {
-        const tempBool = await isOwner({
+        const tempNftDecay = await isNFTDecayed({
           onError: (error) => console.log(error),
         });
-        if (tempBool) {
-          // console.log(brandAddress);
-          // console.log(productId);
-          setSuccess(true);
-        } else {
-          console.log("You are not the owner");
+        if (tempNftDecay) {
+          handleNFTDecayedNotification();
           setBrandId("0");
           setBrandIndex("0");
           setProductId("0");
+        } else {
+          const tempBool = await isOwner({
+            onError: (error) => console.log(error),
+          });
+          if (tempBool) {
+            handleLoginSuccessNotification();
+            setSuccess(true);
+          } else {
+            handleNotOwnerNotification();
+            setBrandId("0");
+            setBrandIndex("0");
+            setProductId("0");
+          }
         }
       }
       // }

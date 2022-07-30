@@ -190,7 +190,17 @@ function RegisterBrand() {
       message: "Transaction Successful",
       title: "Brand Created",
       position: "topR",
-      icon: "bell",
+      icon: "checkmark",
+    });
+  };
+
+  const handleErrorNotification = function (tx) {
+    dispatch({
+      type: "error",
+      message: "Transaction Unsuccessful",
+      title: "Error Occured",
+      position: "topR",
+      icon: "info",
     });
   };
 
@@ -231,7 +241,7 @@ function RegisterBrand() {
       {/* brandID !== 0 && typeof brandID !== "undefined" */}
       {brandID !== "0" && typeof brandID !== "undefined" ? (
         //<Link to='/dh'></Link>
-        <Warehouse brandIndex={brandIndex} />
+        <Warehouse brandIndex={brandIndex} brandId={brandID} />
       ) : (
         <section className="regSection">
           <p
@@ -321,7 +331,7 @@ function RegisterBrand() {
               // setEntryFee(final.toString());
               await deployBrandContract({
                 onSuccess: handleSuccess,
-                onError: (error) => console.log(error),
+                onError: handleErrorNotification,
               });
             }}
           >

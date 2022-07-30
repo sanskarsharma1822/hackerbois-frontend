@@ -6,10 +6,12 @@ import console from "console-browserify";
 import { brandsABI } from "../../constants/Brands/brandsConstant";
 import { useMoralis, useWeb3Contract } from "react-moralis";
 import { useNotification } from "web3uikit";
+import sendMail from "../../backendScripts/sendMessage";
 
 function Product({
   tokenId,
   brandIndex,
+  brandId,
   brandAddress,
   name,
   image,
@@ -25,6 +27,7 @@ function Product({
   const [newAddress, setNewAddress] = useState("");
   const [owner, setOwner] = useState("");
   const [val, setVal] = useState("");
+  const [userEmail, setUserEmail] = useState("");
 
   const {
     runContractFunction: transferToken,
@@ -72,6 +75,7 @@ function Product({
     await tx.wait(1);
     handleNotification(tx);
     // updateUI();
+    sendMail(tokenId, name, brandId, val, userEmail);
   };
 
   const handleNotification = function (tx) {
@@ -80,7 +84,17 @@ function Product({
       message: "NFT Successfully Transferred",
       title: "Product Transferred",
       position: "topR",
-      icon: "bell",
+      icon: "checkmark",
+    });
+  };
+
+  const handleErrorNotification = function (tx) {
+    dispatch({
+      type: "error",
+      message: "NFT Transfer Unsuccessful",
+      title: "Error Occured",
+      position: "topR",
+      icon: "info",
     });
   };
 
@@ -111,6 +125,13 @@ function Product({
                   onChange={(e) => setNewAddress(e.target.value)}
                   required
                 />
+                <label>Email : </label>
+                <input
+                  type="email"
+                  value={userEmail}
+                  onChange={(e) => setUserEmail(e.target.value)}
+                  required
+                />
                 {/* </div>
               <div> */}
                 <Button
@@ -119,7 +140,7 @@ function Product({
                   onClick={async () => {
                     await transferToken({
                       onSuccess: handleSuccess,
-                      onError: (error) => console.log(error),
+                      onError: handleErrorNotification,
                     });
                   }}
                 >
