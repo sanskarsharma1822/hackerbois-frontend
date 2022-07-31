@@ -6,6 +6,7 @@ import {
   faTimes,
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
+import Spinner from "react-bootstrap/Spinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../customer/customer.css";
 import storeData from "../../backendScripts/storeToken";
@@ -406,7 +407,11 @@ function AddProduct({ brandIndex, brandAddress, updateTokenCount }) {
               setIpfsReturn(tempArr);
             }}
           >
-            Register
+            {buttonDisabled ? (
+              <Spinner animation="grow" variant="dark" size="sm" />
+            ) : (
+              "Add"
+            )}
           </button>
           {/* </form> */}
         </section>

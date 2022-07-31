@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Repair from "./repairHistory";
@@ -6,6 +6,9 @@ import ClaimWarrenty from "./claimWarrenty.js";
 import Transfer from "./transferWarrenty.js";
 import "./customer.css";
 import console from "console-browserify";
+import { brandsABI } from "../../constants/Brands/brandsConstant";
+import { useMoralis } from "react-moralis";
+
 //card which displays the product
 function ViewProduct({
   title,
@@ -17,7 +20,28 @@ function ViewProduct({
   tokenId,
 }) {
   const [active, setActive] = useState("");
+  const [val, setVal] = useState("");
+  const { isWeb3Enabled, useWeb3Contract } = useMoralis();
 
+  const { runContractFunction: validityPeriod } = useWeb3Contract({
+    abi: brandsABI,
+    contractAddress: brandAddress,
+    functionName: "validityPeriod",
+    params: { _tokenId: tokenId },
+  });
+
+  const updateIsOwner = async function () {
+    const tempValidityPeriod = await validityPeriod({
+      onError: (error) => console.log(error),
+    });
+    setVal(tempValidityPeriod);
+  };
+
+  useEffect(() => {
+    if (isWeb3Enabled) {
+      updateIsOwner();
+    }
+  }, []);
   return (
     <div className="viewProd">
       <h1>Product Information</h1>
@@ -59,6 +83,8 @@ function ViewProduct({
           brandId={brandId}
           brandAddress={brandAddress}
           tokenId={tokenId}
+          name={title}
+          val={val}
         />
       )}
     </div>

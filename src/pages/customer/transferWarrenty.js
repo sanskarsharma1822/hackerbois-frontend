@@ -15,11 +15,11 @@ import {
 
 import { useNotification } from "web3uikit";
 
-import sendMessage from "../../backendScripts/sendMessage";
+import sendMail from "../../backendScripts/sendMessage";
 
 //------------------------------------------------------------------------------------
 
-function Transfer({ brandIndex, brandId, brandAddress, tokenId }) {
+function Transfer({ brandIndex, brandId, brandAddress, tokenId, name, val }) {
   const userRef = useRef();
   const errRef = useRef();
   const dispatch = useNotification();
@@ -76,6 +76,15 @@ function Transfer({ brandIndex, brandId, brandAddress, tokenId }) {
     },
   });
 
+  const { runContractFunction: getTimePassed } = useWeb3Contract({
+    abi: brandsABI,
+    contractAddress: brandAddress,
+    functionName: "getTimePassed",
+    params: {
+      _tokenId: tokenId,
+    },
+  });
+
   useEffect(() => {
     async function updateIpfsURL() {
       const tempHistory = await viewhistory({
@@ -92,7 +101,11 @@ function Transfer({ brandIndex, brandId, brandAddress, tokenId }) {
 
   const handleSuccess = async function (tx) {
     await tx.wait(1);
-    sendMessage(contact, tokenId, brandId);
+    const timePass = await getTimePassed();
+    const daysPassed = Math.floor(timePass / (3600 * 24));
+    const leftDays = val.toNumber() - daysPassed;
+
+    sendMail(tokenId, name, brandId, leftDays, contact);
     handleNotification(tx);
   };
 
@@ -116,24 +129,19 @@ function Transfer({ brandIndex, brandId, brandAddress, tokenId }) {
     });
   };
 
-  const transfer = async function () {
-    await transferToken({
-      onSuccess: handleSuccess,
-      onError: handleErrorNotification,
-    });
-  };
+  // const transfer = async function () {
+  //   await transferToken({
+  //     onSuccess: handleSuccess,
+  //     onError: handleErrorNotification,
+  //   });
+  // };
 
   useEffect(() => {
     console.log("updating");
     async function updateHistory() {
       await transferToken({
-        onSuccess: () => {
-          console.log("success ipfs");
-          // transfer();
-        },
-        onError: (error) => {
-          console.log(error);
-        },
+        onSuccess: handleSuccess,
+        onError: handleErrorNotification,
       });
     }
     if (ipfsReturn !== "") {
@@ -202,7 +210,7 @@ function Transfer({ brandIndex, brandId, brandAddress, tokenId }) {
             />
             <label htmlFor="contact">Contact No.:</label>
             <input
-              type="number"
+              type="email"
               id="contact"
               ref={userRef}
               autoComplete="off"

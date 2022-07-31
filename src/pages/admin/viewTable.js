@@ -4,6 +4,7 @@ import * as ReactBootstrap from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./admin.css";
 import console from "console-browserify";
+import { Spinner } from "react-bootstrap";
 
 //-------------------------------------------------------
 
@@ -44,7 +45,11 @@ function ViewTable() {
     params: {},
   });
 
-  const { runContractFunction: withdraw } = useWeb3Contract({
+  const {
+    runContractFunction: withdraw,
+    isLoading,
+    isFetching,
+  } = useWeb3Contract({
     abi: brandFactoryABI,
     contractAddress: brandFactoryAddress,
     functionName: "withdraw",
@@ -132,6 +137,7 @@ function ViewTable() {
       </ReactBootstrap.Table>
 
       <button
+        style={{ width: "15%", padding: "12px 32px 12px 25px" }}
         onClick={async () => {
           await withdraw({
             onSuccess: handleSuccess,
@@ -139,7 +145,11 @@ function ViewTable() {
           });
         }}
       >
-        Withdraw
+        {isLoading || isFetching ? (
+          <Spinner animation="grow" variant="dark" size="sm" />
+        ) : (
+          "Withdraw"
+        )}
       </button>
     </div>
   );

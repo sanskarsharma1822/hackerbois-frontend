@@ -7,6 +7,7 @@ import { brandsABI } from "../../constants/Brands/brandsConstant";
 import { useMoralis, useWeb3Contract } from "react-moralis";
 import { useNotification } from "web3uikit";
 import sendMail from "../../backendScripts/sendMessage";
+import storeOwnerHistory from "../../backendScripts/storeOwnerHistory";
 
 function Product({
   tokenId,
@@ -28,6 +29,8 @@ function Product({
   const [owner, setOwner] = useState("");
   const [val, setVal] = useState("");
   const [userEmail, setUserEmail] = useState("");
+  const [ipfs, setIPFS] = useState("");
+  const [IPFSReturn, setIPFSReturn] = useState("");
 
   const {
     runContractFunction: transferToken,
@@ -37,13 +40,20 @@ function Product({
     abi: brandsABI,
     contractAddress: brandAddress,
     functionName: "transferToken",
-    params: { _sendTo: newAddress, _tokenId: tokenId },
+    params: { _sendTo: newAddress, _tokenId: tokenId, _newHistory: IPFSReturn },
   });
 
   const { runContractFunction: isOwner } = useWeb3Contract({
     abi: brandsABI,
     contractAddress: brandAddress,
     functionName: "isOwner",
+    params: { _tokenId: tokenId },
+  });
+
+  const { runContractFunction: viewhistory } = useWeb3Contract({
+    abi: brandsABI,
+    contractAddress: brandAddress,
+    functionName: "viewhistory",
     params: { _tokenId: tokenId },
   });
 
@@ -61,15 +71,31 @@ function Product({
     const tempValidityPeriod = await validityPeriod({
       onError: (error) => console.log(error),
     });
+    const tempHistory = await viewhistory({
+      onError: (error) => console.log(error),
+    });
     setVal(tempValidityPeriod);
     setOwner(tempOwner);
+    setIPFS(tempHistory);
   };
 
   useEffect(() => {
     if (isWeb3Enabled) {
       updateIsOwner();
     }
-  }, [isWeb3Enabled]);
+  }, []);
+
+  useEffect(() => {
+    async function updateIPFSHistory() {
+      await transferToken({
+        onSuccess: handleSuccess,
+        onError: handleErrorNotification,
+      });
+    }
+    if (IPFSReturn !== "") {
+      updateIPFSHistory();
+    }
+  }, [IPFSReturn]);
 
   const handleSuccess = async function (tx) {
     await tx.wait(1);
@@ -138,10 +164,12 @@ function Product({
                   variant="primary"
                   disabled={isFetching || isLoading ? true : false}
                   onClick={async () => {
-                    await transferToken({
-                      onSuccess: handleSuccess,
-                      onError: handleErrorNotification,
-                    });
+                    const tempRetIpfs = await storeOwnerHistory(
+                      ipfs,
+                      newAddress,
+                      chainId
+                    );
+                    setIPFSReturn(tempRetIpfs);
                   }}
                 >
                   Transfer
