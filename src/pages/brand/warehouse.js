@@ -220,7 +220,25 @@ function Warehouse({ brandIndex, brandId }) {
       {/* {console.log(numOfTokens)} */}
       {/* {console.log(finalArr)} */}
       {/* {console.log(numOfTokens)} */}
-      <h1>Welcome to Warehouse</h1>
+      <h1
+        style={{
+          fontSize: "4.5rem",
+          fontWeight: "bold",
+          paddingBottom: "3rem",
+        }}
+      >
+        Welcome to Warehouse
+      </h1>
+      <hr
+        style={{
+          boxShadow: "5px 10px 25px rgba(145, 92, 182, 15.5)",
+          height: "5px",
+          fontWeight: "bold",
+          backgroundColor: "rgb(25,25,25)",
+          alignSelf: "center",
+          marginBottom: "5rem",
+        }}
+      ></hr>
 
       <section className="head">
         <div>
@@ -233,7 +251,7 @@ function Warehouse({ brandIndex, brandId }) {
         <div>
           <div>
             <label htmlfor="pack">
-              <h4>Select a Warranty Pack : </h4>
+              <h4>Extend Contract By : </h4>
             </label>
             <select
               id="pack"
@@ -247,6 +265,7 @@ function Warehouse({ brandIndex, brandId }) {
               <option value="3">90 Days</option>
             </select>
             <button
+              id="extendButton"
               onClick={async () => {
                 await extendWarranty({
                   onSuccess: () => console.log("success"),
@@ -257,7 +276,9 @@ function Warehouse({ brandIndex, brandId }) {
               Extend Warranty
             </button>
             <br></br>
-            <h6>Warranty left : {brandWarrantyLeft} days</h6>
+            <h6 style={{ marginRight: "40px" }}>
+              Contract left : {brandWarrantyLeft} days
+            </h6>
           </div>
         </div>
       </section>
@@ -270,7 +291,15 @@ function Warehouse({ brandIndex, brandId }) {
             updateTokenCount={updateNumberOfTokens}
           />
         ) : (
-          <h1>Your Products</h1>
+          <h1
+            style={{
+              paddingTop: "3rem",
+              fontSize: "3.5rem",
+              paddingBottom: "2.5rem",
+            }}
+          >
+            Your Products
+          </h1>
         )}
         <div className="cards-outer">
           <section className="cards">

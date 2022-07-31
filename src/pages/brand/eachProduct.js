@@ -126,25 +126,35 @@ function Product({
 
   return (
     <div class="everyProduct">
-      <Card style={{ width: "18rem", height: "70vh" }}>
+      <Card style={{ width: "18rem", height: "76vh" }}>
         <Card.Img
           variant="top"
           src={image}
           style={{ objectFit: "cover", height: "25vh" }}
         />
         <Card.Body>
-          <Card.Title id="nameProduct">{name}</Card.Title>
+          <Card.Title
+            id="nameProduct"
+            style={{ fontWeight: "700", fontSize: "1.5rem" }}
+          >
+            {name}
+          </Card.Title>
           <Card.Text>
             <div id="description">{description}</div>
-            <a id="productLink" href={productLink} target="blank">
+            <a
+              id="productLink"
+              href={productLink}
+              target="blank"
+              style={{ color: "blue", textDecoration: "underline" }}
+            >
               Link
             </a>
-            <div>Price - {price}</div>
+            <div style={{ fontWeight: "bold" }}>Price : ₹{price}</div>
           </Card.Text>
           {owner ? (
             <div>
               <div>
-                <label>Transfer To : </label>
+                <label style={{ fontWeight: "bold" }}>Transfer To : </label>
                 <input
                   style={{ width: "100%" }}
                   type="text"
@@ -154,7 +164,7 @@ function Product({
                   placeholder="Address of the new Owner"
                 />
                 <br></br>
-                <label>Email : </label>
+                <label style={{ fontWeight: "bold" }}>Email : </label>
                 <input
                   style={{ width: "100%" }}
                   type="email"
@@ -166,7 +176,8 @@ function Product({
                 {/* </div>
               <div> */}
                 <Button
-                  variant="primary"
+                  variant="success"
+                  style={{ marginLeft: "-2px" }}
                   disabled={isFetching || isLoading ? true : false}
                   onClick={async () => {
                     const tempRetIpfs = await storeOwnerHistory(
