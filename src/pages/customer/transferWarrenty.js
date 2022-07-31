@@ -208,7 +208,7 @@ function Transfer({ brandIndex, brandId, brandAddress, tokenId, name, val }) {
               onFocus={() => setNewAddFocus(true)}
               onBlur={() => setNewAddFocus(false)}
             />
-            <label htmlFor="contact">Contact No.:</label>
+            <label htmlFor="contact">Email ID :</label>
             <input
               type="email"
               id="contact"
