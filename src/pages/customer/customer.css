@@ -126,8 +126,6 @@ color:black;
     border: none;
  }
 
- #repairTable{
-    color:white;
-    margin:100px;
-    width:50%;
+ td{
+    margin: 100px;
  }
