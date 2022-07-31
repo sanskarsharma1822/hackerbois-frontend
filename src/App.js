@@ -20,17 +20,17 @@ function App() {
       <NotificationProvider>
         <div className="App">
           <Router>
-            <nav>
-              <Link className="navHeaders" to="/">
+            <nav style={{ fontFamily: "cursive" }}>
+              <Link className="navheaders" to="/">
                 Home
               </Link>
-              <Link className="navHeaders" to="/admin">
+              <Link className="navheaders" to="/admin">
                 Admin
               </Link>
-              <Link className="navHeaders" to="/brand">
+              <Link className="navheaders" to="/brand">
                 Brand
               </Link>
-              <Link className="navHeaders" to="/customer">
+              <Link className="navheaders" to="/customer">
                 Customer
               </Link>
               <ConnectWallet />

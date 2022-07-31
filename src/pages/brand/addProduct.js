@@ -254,7 +254,7 @@ function AddProduct({ brandIndex, brandAddress, updateTokenCount }) {
         //send info to db
         window.location.reload()
       ) : (
-        <section className="addProduct">
+        <section className="addProduct" style={{ paddingBottom: "3rem" }}>
           <p
             ref={errRef}
             className={errMsg ? "errmsg" : "offscreen"}
@@ -262,7 +262,7 @@ function AddProduct({ brandIndex, brandAddress, updateTokenCount }) {
           >
             {errMsg}
           </p>
-          <h1>Register New Product</h1>
+          <h1 style={{ paddingBottom: "2.25rem" }}>Register New Product</h1>
           {/* <form onSubmit={handleSubmit}> */}
           <label htmlFor="name">Name:</label>
           <input

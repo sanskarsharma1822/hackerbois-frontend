@@ -308,7 +308,7 @@ function RegisterBrand() {
             onBlur={() => setIdFocus(false)}
           />
           <hr></hr>
-          <label htmlfor="pack">Select a Warrenty Pack : </label>
+          <label htmlfor="pack">Select a Contract : </label>
           <select
             id="pack"
             name="pack"

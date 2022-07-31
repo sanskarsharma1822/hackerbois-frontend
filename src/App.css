@@ -2,12 +2,12 @@ html {
   height: 100%;
 }
 
-body{
+body {
   height: 100% !important;
 }
 
-#root{
-  height:100%;
+#root {
+  height: 100%;
 }
 .App {
   /*text-align: center;
@@ -22,36 +22,42 @@ body{
   /* background: rgb(21,7,149);
   background: linear-gradient(30deg, rgba(21,7,149,0.9756945014333859) 0%, rgba(45,252,253,1) 100%); */
 
-  background: rgb(0, 0, 0); 
-  background: linear-gradient(30deg, rgba(0, 0, 0, 0.976) 0%, rgb(38, 38, 38) 100%);
+  background: rgb(0, 0, 0);
+  background: linear-gradient(
+    30deg,
+    rgba(0, 0, 0, 0.976) 0%,
+    rgb(38, 38, 38) 100%
+  );
 }
 
-nav{
+nav {
   display: flex;
   min-height: 8vh;
-  justify-content:space-evenly;
+  justify-content: space-evenly;
   padding: 2%;
   font-size: 1.5em;
-  margin-bottom:4%;
+  margin-bottom: 4%;
   font-weight: 600;
 }
-nav a{
+nav a {
   text-decoration: none;
 }
 
-.navHeaders:hover{
-  color:rgb(107, 107, 107)
+.navheaders:hover {
+  color: rgb(107, 107, 107);
 }
 
-button{
-  font-family: 'DM Sans', sans-serif;
-font-size: 18px;
-padding: 12px 32px;
-margin: 1rem;
-cursor: pointer;
-border-radius: 4px;
-transition: all 0.3s ease;
-/* border-radius: 50px; */
+button {
+  /* font-family: "DM Sans", sans-serif; */
+  font-size: 18px;
+  padding: 12px 32px;
+  margin: 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  font-family: cursive;
+  /* border-radius: 50px; */
 }
 
 button:hover {
@@ -68,4 +74,3 @@ button:hover {
   font-size: calc(10px + 2vmin);
   color: white;
 }*/
-
