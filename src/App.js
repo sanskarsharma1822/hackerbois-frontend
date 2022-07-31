@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Home from "./pages/Home/Home";
 import DummyCanvas from "../src/pages/dummy3/dummyCanvas.js";

@@ -1,0 +1,27 @@
+/* #spin {
+  animation-duration: 2.5s;
+  animation-name: fadeOut;
+  animation-timing-function: ease-out;
+} */
+
+@keyframes myAnimation {
+  0% {
+    opacity: 1;
+    transform: rotateX(90deg);
+  }
+  50% {
+    opacity: 0.5;
+    transform: rotateX(0deg);
+  }
+  100% {
+    display: none;
+    opacity: 0;
+    transform: rotateX(90deg);
+  }
+}
+
+#spin {
+  animation-name: myAnimation;
+  animation-duration: 2000ms;
+  animation-fill-mode: forwards;
+}

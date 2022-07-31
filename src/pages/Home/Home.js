@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 //import {init} from "./utils/initDrone.js";
 import { Link } from "react-router-dom";
 import "./home.css";
 import "../customer/customer.css";
+import Spinner from "../Spinner/spinner";
 
 function Home() {
-  return (
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 2500);
+  }, []);
+
+  return loading ? (
+    <Spinner />
+  ) : (
     <div className="homeContainer">
       <section className="home">
         <h1>Choose profile here</h1>
