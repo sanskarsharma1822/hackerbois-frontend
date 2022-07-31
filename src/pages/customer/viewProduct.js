@@ -7,7 +7,7 @@ import Transfer from "./transferWarrenty.js";
 import "./customer.css";
 import console from "console-browserify";
 import { brandsABI } from "../../constants/Brands/brandsConstant";
-import { useMoralis } from "react-moralis";
+import { useMoralis, useWeb3Contract } from "react-moralis";
 
 //card which displays the product
 function ViewProduct({
@@ -21,7 +21,7 @@ function ViewProduct({
 }) {
   const [active, setActive] = useState("");
   const [val, setVal] = useState("");
-  const { isWeb3Enabled, useWeb3Contract } = useMoralis();
+  const { isWeb3Enabled } = useMoralis();
 
   const { runContractFunction: validityPeriod } = useWeb3Contract({
     abi: brandsABI,
