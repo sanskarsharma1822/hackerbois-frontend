@@ -63,7 +63,7 @@ function Repair({ brandIndex, brandAddress, tokenId }) {
 
   return (
     <div id="repairTable" style={{ width: "60%", margin: "0% auto" }}>
-      <ReactBootstrap.Table striped bordered hover>
+      <ReactBootstrap.Table>
         <thead>
           <tr>
             <th>PRODUCT ID</th>

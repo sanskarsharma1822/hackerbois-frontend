@@ -348,6 +348,7 @@ function AddProduct({ brandIndex, brandAddress, updateTokenCount }) {
             onChange={(e) => setDescp(e.target.value)}
             value={descp}
             required
+            maxlength="60"
             //aria-invalid={validName ? "false" : "true"}
             //aria-describedby="uidnote"
             onFocus={() => setDescpFocus(true)}

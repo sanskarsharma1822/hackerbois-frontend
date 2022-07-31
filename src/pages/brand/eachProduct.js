@@ -100,11 +100,11 @@ function Product({
 
   return (
     <div class="everyProduct">
-      <Card style={{ width: "18rem", height: "60vh" }}>
+      <Card style={{ width: "18rem", height: "70vh" }}>
         <Card.Img
           variant="top"
           src={image}
-          style={{ objectFit: "cover", height: "20vh" }}
+          style={{ objectFit: "cover", height: "25vh" }}
         />
         <Card.Body>
           <Card.Title id="nameProduct">{name}</Card.Title>
@@ -120,17 +120,22 @@ function Product({
               <div>
                 <label>Transfer To : </label>
                 <input
+                  style={{ width: "100%" }}
                   type="text"
                   value={newAddress}
                   onChange={(e) => setNewAddress(e.target.value)}
                   required
+                  placeholder="Address of the new Owner"
                 />
+                <br></br>
                 <label>Email : </label>
                 <input
+                  style={{ width: "100%" }}
                   type="email"
                   value={userEmail}
                   onChange={(e) => setUserEmail(e.target.value)}
                   required
+                  placeholder="Email Id of the new Owner"
                 />
                 {/* </div>
               <div> */}
