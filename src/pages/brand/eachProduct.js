@@ -177,7 +177,7 @@ function Product({
               </div>
             </div>
           ) : (
-            <div>NFT has already been transfered</div>
+            <div style={{ color: "red" }}>NFT has already been transfered</div>
           )}
         </Card.Body>
       </Card>

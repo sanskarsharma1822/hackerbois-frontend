@@ -23,7 +23,7 @@ import {
   adminContractAddress,
 } from "../../constants/Admin/adminConstants";
 
-import sendMessage from "../../backendScripts/sendMessage";
+// import sendMessage from "../../backendScripts/sendMessage";
 
 //------------------------------------------------------------------------------------
 const NAME_REGEX = /^[a-zA-Z0-9_.-]*$/;
