@@ -5,6 +5,7 @@ import {
   faTimes,
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
+import "../../App.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../customer/customer.css";
 import axios from "../../api/axios.js";
@@ -236,108 +237,109 @@ function RegisterBrand() {
   //-------------------------------------------------------------------------------------
 
   return (
-    <div classsName="regContainer">
-      {/*if registration of product was successful -> go to warehouse */}
-      {/* brandID !== 0 && typeof brandID !== "undefined" */}
-      {brandID !== "0" && typeof brandID !== "undefined" ? (
-        //<Link to='/dh'></Link>
-        <Warehouse brandIndex={brandIndex} brandId={brandID} />
-      ) : (
-        <section className="regSection">
-          <p
-            ref={errRef}
-            className={errMsg ? "errmsg" : "offscreen"}
-            aria-live="assertive"
-          >
-            {errMsg}
-          </p>
-          <h1>Register Brand</h1>
-          {/* <form onSubmit={handleSubmit}> */}
-          <br></br>
-          <label htmlFor="name">Brand Name : </label>
-          <input
-            type="text"
-            id="name"
-            ref={userRef}
-            autoComplete="off"
-            onChange={(e) => setName(e.target.value)}
-            value={name}
-            required
-            //aria-invalid={validName ? "false" : "true"}
-            //aria-describedby="uidnote"//wtf is this
-            onFocus={() => setNameFocus(true)}
-            onBlur={() => setNameFocus(false)}
-          />
-          {/*<p id="uidnote" className={nameFocus && name && !validName ? "instructions" : "offscreen"}>
+    <div className="fullbox">
+      <div classsName="regContainer">
+        {/*if registration of product was successful -> go to warehouse */}
+        {/* brandID !== 0 && typeof brandID !== "undefined" */}
+        {brandID !== "0" && typeof brandID !== "undefined" ? (
+          //<Link to='/dh'></Link>
+          <Warehouse brandIndex={brandIndex} brandId={brandID} />
+        ) : (
+          <section className="regSection">
+            <p
+              ref={errRef}
+              className={errMsg ? "errmsg" : "offscreen"}
+              aria-live="assertive"
+            >
+              {errMsg}
+            </p>
+            <h1>Register Brand</h1>
+            {/* <form onSubmit={handleSubmit}> */}
+            <br></br>
+            <label htmlFor="name">Brand Name : </label>
+            <input
+              type="text"
+              id="name"
+              ref={userRef}
+              autoComplete="off"
+              onChange={(e) => setName(e.target.value)}
+              value={name}
+              required
+              //aria-invalid={validName ? "false" : "true"}
+              //aria-describedby="uidnote"//wtf is this
+              onFocus={() => setNameFocus(true)}
+              onBlur={() => setNameFocus(false)}
+            />
+            {/*<p id="uidnote" className={nameFocus && name && !validName ? "instructions" : "offscreen"}>
                             <FontAwesomeIcon icon={faInfoCircle} />
                             4 to 24 characters.<br />
                             Must begin with a letter.<br />
                             Letters, numbers, underscores, hyphens allowed.
             </p>*/}
-          <hr></hr>
-          <label htmlFor="email">Email : </label>
-          <input
-            type="email"
-            id="email"
-            ref={userRef}
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            required
-            //aria-invalid={validPrice ? "false" : "true"}
-            //aria-describedby="pricenote"
-            onFocus={() => setEmailFocus(true)}
-            onBlur={() => setEmailFocus(false)}
-          />
-          {/*<p id="pricenote" className={priceFocus && !validPrice ? "instructions" : "offscreen"}>
+            <hr></hr>
+            <label htmlFor="email">Email : </label>
+            <input
+              type="email"
+              id="email"
+              ref={userRef}
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              required
+              //aria-invalid={validPrice ? "false" : "true"}
+              //aria-describedby="pricenote"
+              onFocus={() => setEmailFocus(true)}
+              onBlur={() => setEmailFocus(false)}
+            />
+            {/*<p id="pricenote" className={priceFocus && !validPrice ? "instructions" : "offscreen"}>
                             <FontAwesomeIcon icon={faInfoCircle} />
                             Price should be a Number 
         </p>*/}
-          <hr></hr>
-          <label htmlFor="id">Brand ID : </label>
-          <input
-            type="text"
-            id="id"
-            ref={userRef}
-            autoComplete="off"
-            onChange={(e) => setId(e.target.value)}
-            value={id}
-            required
-            //aria-invalid={validName ? "false" : "true"}
-            //aria-describedby="uidnote"
-            onFocus={() => setIdFocus(true)}
-            onBlur={() => setIdFocus(false)}
-          />
-          <hr></hr>
-          <label htmlfor="pack">Select a Contract : </label>
-          <select
-            id="pack"
-            name="pack"
-            onChange={(e) => setWarrenty(e.target.value)}
-            value={warrenty}
-            required
-          >
-            <option value="1">30 Days</option>
-            <option value="2">60 Days</option>
-            <option value="3">90 Days</option>
-          </select>
-          <hr></hr>
-          <button
-            disabled={!name || !email || !id || !warrenty ? true : false}
-            onClick={async () => {
-              // const tempMul = (await getEntryFee()).toString();
-              // const tempFee = tempMul * 0.01;
-              // const tempFeeString = tempFee.toString();
-              // const final = ethers.utils.parseEther(tempFeeString);
-              // setEntryFee(final.toString());
-              await deployBrandContract({
-                onSuccess: handleSuccess,
-                onError: handleErrorNotification,
-              });
-            }}
-          >
-            Submit
-          </button>
-          {/* <button
+            <hr></hr>
+            <label htmlFor="id">Brand ID : </label>
+            <input
+              type="text"
+              id="id"
+              ref={userRef}
+              autoComplete="off"
+              onChange={(e) => setId(e.target.value)}
+              value={id}
+              required
+              //aria-invalid={validName ? "false" : "true"}
+              //aria-describedby="uidnote"
+              onFocus={() => setIdFocus(true)}
+              onBlur={() => setIdFocus(false)}
+            />
+            <hr></hr>
+            <label htmlfor="pack">Select a Contract : </label>
+            <select
+              id="pack"
+              name="pack"
+              onChange={(e) => setWarrenty(e.target.value)}
+              value={warrenty}
+              required
+            >
+              <option value="1">30 Days</option>
+              <option value="2">60 Days</option>
+              <option value="3">90 Days</option>
+            </select>
+            <hr></hr>
+            <button
+              disabled={!name || !email || !id || !warrenty ? true : false}
+              onClick={async () => {
+                // const tempMul = (await getEntryFee()).toString();
+                // const tempFee = tempMul * 0.01;
+                // const tempFeeString = tempFee.toString();
+                // const final = ethers.utils.parseEther(tempFeeString);
+                // setEntryFee(final.toString());
+                await deployBrandContract({
+                  onSuccess: handleSuccess,
+                  onError: handleErrorNotification,
+                });
+              }}
+            >
+              Submit
+            </button>
+            {/* <button
             type="submit"
             onClick={async () => {
               await deployBrandContract({
@@ -348,9 +350,10 @@ function RegisterBrand() {
           >
             Submit
           </button> */}
-          {/* </form> */}
-        </section>
-      )}
+            {/* </form> */}
+          </section>
+        )}
+      </div>
     </div>
   );
 }

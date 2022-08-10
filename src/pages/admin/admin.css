@@ -1,11 +1,11 @@
 .landingAdmin {
-    align-items: center;
-    height: 100% !important;
+  align-items: center;
+  height: 100% !important;
 }
-.landingAdmin h1{
-    text-align: center;
-    font-style: italic;
-    font-weight: bold;;
+.landingAdmin h1 {
+  text-align: center;
+  font-style: italic;
+  font-weight: bold;
 }
 /*.table-container{
     /*background: rgb(21,7,149);
@@ -13,21 +13,21 @@
     background: linear-gradient(30deg, rgba(126,9,172,0.9756945014333859) 0%, rgba(33,154,236,1) 100%);
 
 }*/
-.table-container{
-    margin:5% 20%;
-    height:60vh;
-    position: relative;
+.table-container {
+  margin: 5% 20%;
+  height: 60vh;
+  position: relative;
 }
 
-.table-container button{
-    bottom:5%;
-    right:0%;
-    position: absolute;
-    float: right;   
+.table-container button {
+  bottom: 5%;
+  right: 0%;
+  position: absolute;
+  float: right;
 }
 
-button{
-    font-family: 'DM Sans', sans-serif;
+button {
+  font-family: "DM Sans", sans-serif;
   font-size: 18px;
   padding: 12px 32px;
   margin: 1rem;
@@ -37,10 +37,103 @@ button{
   /* border-radius: 50px; */
 }
 
-button :hover{
-    box-shadow: rgba(var(--primary-color), 0.5) 0px 0px 20px 0px;
+button :hover {
+  box-shadow: rgba(var(--primary-color), 0.5) 0px 0px 20px 0px;
 }
 
-th, td{
-    color:white;
+th,
+td {
+  color: white;
+}
+
+.container {
+  text-align: center;
+  margin-top: 6.5%;
+}
+.content {
+  height: 100px;
+  width: 100px;
+  background-color: black;
+}
+.mockup {
+  display: inline-block;
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  font-size: 0;
+  perspective: 2400px;
+  perspective-origin: 50% 100%;
+  opacity: 0;
+  transition: 500ms opacity;
+}
+
+.mockup.loaded {
+  opacity: 1;
+}
+
+.mockup .part .top,
+.mockup .part .bottom {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.mockup .part.top {
+  transform: translate3d(0, 0, 0) rotateX(-90deg);
+}
+
+.mockup:hover .part.top {
+  transform: translate3d(0, 0, 0) rotateX(0deg);
+}
+
+.mockup .part {
+  display: inline-block;
+  position: relative;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  transform-origin: 50% 100%;
+  transition: 900ms;
+}
+
+.mockup.opened .part .top {
+  transform: translate3d(0, 0, -11px) rotateX(90deg) scale(1, 1);
+}
+
+.mockup .part .top {
+  transform-origin: 50% 0;
+  transform: translate3d(0, 0, -11px) rotateX(90deg);
+  transition: 900ms;
+}
+
+.mockup img {
+  display: block;
+  max-width: 100%;
+  backface-visibility: hidden;
+}
+
+.mockup .part .cover {
+  position: relative;
+}
+
+.mockup video {
+  display: block;
+  position: absolute;
+  top: 8%;
+  left: 4%;
+  width: 92%;
+  border-radius: 6px;
+  backface-visibility: hidden;
+  transform: translate3d(0, 0, 1px);
+}
+
+.mockup .part.bottom {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate3d(0, 0, 0) rotateX(-90deg);
+}
+
+.mockup .part .bottom {
+  transform-origin: 50% 0;
+  transform: translate3d(0, 0, 0) rotateX(90deg);
 }
