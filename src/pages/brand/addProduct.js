@@ -247,8 +247,6 @@ function AddProduct({ brandIndex, brandAddress, updateTokenCount }) {
       {/* {console.log(brandIndex)}
      {console.log(brandAddress)} 
       {/* {console.log(max.toString())} */}
-      {console.log(brandAddress)}
-      {console.log(brandIndex)}
       {/*if registration of product was successful -> go to warehouse */}
       {success ? (
         //send info to db

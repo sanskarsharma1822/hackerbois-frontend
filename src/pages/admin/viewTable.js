@@ -112,7 +112,6 @@ function ViewTable() {
   return (
     <div className="fullbox">
       <div className="table-container">
-        {console.log(brandsBalance)}
         <ReactBootstrap.Table>
           <thead>
             <tr>

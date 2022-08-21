@@ -103,7 +103,6 @@ function Warehouse({ brandIndex, brandId }) {
   });
 
   const updateNumberOfTokens = async function () {
-    console.log("Updating no of tokens");
     const tempNumberOfTokens = await getTotalySupply({
       onError: (error) => console.log(error),
     });
@@ -217,89 +216,103 @@ function Warehouse({ brandIndex, brandId }) {
     //add new product btn
     <div className="fullbox">
       <div className="warehouse">
-        {/* {console.log(brandIndex)} */}
-        {/* {console.log(brandAddress)} */}
-        {/* {console.log(numOfTokens)} */}
-        {/* {console.log(finalArr)} */}
-        {/* {console.log(numOfTokens)} */}
-        <h1
-          style={{
-            fontSize: "4.5rem",
-            fontWeight: "bold",
-            paddingBottom: "3rem",
-          }}
-        >
-          Welcome to Warehouse
-        </h1>
-        <hr
-          style={{
-            boxShadow: "5px 10px 25px rgba(145, 92, 182, 15.5)",
-            height: "5px",
-            fontWeight: "bold",
-            backgroundColor: "rgb(25,25,25)",
-            alignSelf: "center",
-            marginBottom: "5rem",
-          }}
-        ></hr>
+        <div className="warehouseTopContainer">
+          {/* {console.log(brandIndex)} */}
+          {/* {console.log(brandAddress)} */}
+          {/* {console.log(numOfTokens)} */}
+          {/* {console.log(finalArr)} */}
+          {/* {console.log(numOfTokens)} */}
+          <h1
+            style={{
+              fontSize: "4.5rem",
+              fontWeight: "bold",
+              paddingBottom: "3rem",
+            }}
+          >
+            Welcome to Warehouse
+          </h1>
+          <hr
+            style={{
+              boxShadow: "5px 10px 25px rgba(145, 92, 182, 15.5)",
+              height: "5px",
+              fontWeight: "bold",
+              backgroundColor: "rgb(25,25,25)",
+              alignSelf: "center",
+              marginBottom: "5rem",
+            }}
+          ></hr>
 
-        <section className="head">
-          <div>
-            <button
-              onClick={() =>
-                showForm ? setShowForm(false) : setShowForm(true)
-              }
-            >
-              Add New Product
-            </button>
-          </div>
-          <div>
+          <section className="head">
             <div>
-              <label htmlfor="pack">
-                <h4>Extend Contract By : </h4>
-              </label>
-              <select
-                id="pack"
-                name="pack"
-                onChange={(e) => setWarrantyAdded(e.target.value)}
-                value={warrantyAdded}
-                required
-              >
-                <option value="1">30 Days</option>
-                <option value="2">60 Days</option>
-                <option value="3">90 Days</option>
-              </select>
               <button
-                id="extendButton"
-                onClick={async () => {
-                  await extendWarranty({
-                    onSuccess: () => console.log("success"),
-                    onError: (error) => console.log(error),
-                  });
-                }}
+                onClick={() =>
+                  showForm ? setShowForm(false) : setShowForm(true)
+                }
               >
-                Extend Warranty
+                Add New Product
               </button>
-              <br></br>
-              <h6 style={{ marginRight: "40px" }}>
-                Contract left : {brandWarrantyLeft} days
-              </h6>
             </div>
-          </div>
-        </section>
+            <div>
+              <div>
+                <label htmlfor="pack">
+                  <h4>Extend Contract By : </h4>
+                </label>
+                <select
+                  id="pack"
+                  name="pack"
+                  onChange={(e) => setWarrantyAdded(e.target.value)}
+                  value={warrantyAdded}
+                  required
+                >
+                  <option value="1" style={{ backgroundColor: "black" }}>
+                    30 Days
+                  </option>
+                  <option value="2" style={{ backgroundColor: "black" }}>
+                    60 Days
+                  </option>
+                  <option value="3" style={{ backgroundColor: "black" }}>
+                    90 Days
+                  </option>
+                </select>
+                <button
+                  id="extendButton"
+                  onClick={async () => {
+                    await extendWarranty({
+                      onSuccess: () => console.log("success"),
+                      onError: (error) => console.log(error),
+                    });
+                  }}
+                >
+                  Extend Warranty
+                </button>
+                <br></br>
+                <h6 style={{ marginRight: "40px" }}>
+                  Contract left : {brandWarrantyLeft} days
+                </h6>
+              </div>
+            </div>
+          </section>
+        </div>
         <section>
           {showForm ? (
             // <AddProduct brandIndex={brandIndex} />
-            <AddProduct
-              brandIndex={brandIndex}
-              brandAddress={brandAddress}
-              updateTokenCount={updateNumberOfTokens}
-            />
+            <div
+              className="warehouseTopContainer"
+              style={{ borderRadius: "0 0 2% 2%", marginTop: "-5px" }}
+            >
+              <AddProduct
+                brandIndex={brandIndex}
+                brandAddress={brandAddress}
+                updateTokenCount={updateNumberOfTokens}
+              />
+            </div>
           ) : (
             <h1
               style={{
                 paddingTop: "3rem",
                 fontSize: "3.5rem",
                 paddingBottom: "2.5rem",
+                color: "black",
               }}
             >
               Your Products

@@ -4,14 +4,16 @@ import {
   faCheck,
   faTimes,
   faInfoCircle,
+  faBullseye,
 } from "@fortawesome/free-solid-svg-icons";
-import "../../App.css";
+import "./brand.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../customer/customer.css";
 import axios from "../../api/axios.js";
 import Warehouse from "./warehouse.js";
 import console from "console-browserify";
 import Moralis from "moralis";
+import Spinner from "react-bootstrap/Spinner";
 
 //Shanky Imports
 //-----------------------------------------------------------------------
@@ -126,7 +128,7 @@ function RegisterBrand() {
 
   const [brandIndex, setBrandIndex] = useState("0");
   const [brandID, setBrandID] = useState("0");
-  // const [entryFee, setEntryFee] = useState("0");
+  const [buttonDisabled, setButtonDisabled] = useState(false);
   const [entryFee, setEntryFee] = useState("10000000000000000");
   const [smartContractAddress, setSmartContractAddress] = useState("");
 
@@ -180,6 +182,7 @@ function RegisterBrand() {
   };
 
   const handleSuccess = async function (tx) {
+    setButtonDisabled(false);
     await tx.wait(1);
     handleNotification(tx);
     updateUI();
@@ -196,6 +199,7 @@ function RegisterBrand() {
   };
 
   const handleErrorNotification = function (tx) {
+    setButtonDisabled(false);
     dispatch({
       type: "error",
       message: "Transaction Unsuccessful",
@@ -318,9 +322,15 @@ function RegisterBrand() {
               value={warrenty}
               required
             >
-              <option value="1">30 Days</option>
-              <option value="2">60 Days</option>
-              <option value="3">90 Days</option>
+              <option value="1" style={{ backgroundColor: "black" }}>
+                30 Days
+              </option>
+              <option value="2" style={{ backgroundColor: "black" }}>
+                60 Days
+              </option>
+              <option value="3" style={{ backgroundColor: "black" }}>
+                90 Days
+              </option>
             </select>
             <hr></hr>
             <button
@@ -331,13 +341,18 @@ function RegisterBrand() {
                 // const tempFeeString = tempFee.toString();
                 // const final = ethers.utils.parseEther(tempFeeString);
                 // setEntryFee(final.toString());
+                setButtonDisabled(true);
                 await deployBrandContract({
                   onSuccess: handleSuccess,
                   onError: handleErrorNotification,
                 });
               }}
             >
-              Submit
+              {buttonDisabled ? (
+                <Spinner animation="grow" variant="dark" size="sm" />
+              ) : (
+                "Submit"
+              )}
             </button>
             {/* <button
             type="submit"

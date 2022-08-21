@@ -20,7 +20,10 @@ function Home() {
   return (
     <div className="fullbox">
       <div className="homeContainer">
-        <section className="home">
+        <section
+          className="home"
+          style={{ backgroundColor: "rgb(0,0,0,0.75)", borderRadius: "2%" }}
+        >
           <h1>Choose profile here</h1>
 
           <button>

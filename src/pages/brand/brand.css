@@ -93,6 +93,8 @@
   align-items: center;
   /* justify-content: space-between; */
   /* text-align: center; */
+  background-color: rgb(0, 0, 0, 0.75);
+  border-radius: 2%;
 }
 
 .regSection input {
@@ -133,7 +135,7 @@
   border-radius: 2%;
   height: 35px;
   color: white;
-  background-color: rgb(25, 25, 25);
+  background-color: transparent;
   font-family: cursive;
   font-size: 1.15rem;
   border: none;
@@ -174,4 +176,19 @@ h1 {
 
 .title {
   color: black;
+}
+/* 
+label {
+  display: block;
+} */
+
+.fullbox {
+  overflow-x: hidden;
+}
+
+.warehouseTopContainer {
+  background-color: rgb(0, 0, 0, 0.75);
+  border-radius: 2%;
+  width: 95%;
+  margin: auto;
 }
