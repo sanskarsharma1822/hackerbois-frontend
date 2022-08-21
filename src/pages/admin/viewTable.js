@@ -3,6 +3,7 @@ import axios from "axios";
 import * as ReactBootstrap from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./admin.css";
+import "../../App.css";
 import console from "console-browserify";
 import { Spinner } from "react-bootstrap";
 
@@ -109,48 +110,50 @@ function ViewTable() {
   };
 
   return (
-    <div className="table-container">
-      {console.log(brandsBalance)}
-      <ReactBootstrap.Table>
-        <thead>
-          <tr>
-            <th>BRAND ID</th>
-            <th>BRAND ADDRESS</th>
-            <th>BRAND NAME</th>
-            <th>BRAND EMAIL</th>
-            <th>WARRANTY LEFT</th>
-          </tr>
-        </thead>
-        <tbody>
-          {brandsArr.length &&
-            brandsArr.map((currBrand) => (
-              <tr key={currBrand.brandID.toString()}>
-                <td>{currBrand.brandID.toString()}</td>
-                <td>{currBrand.brandAddress.toString()}</td>
-                <td>{currBrand.brandName.toString()}</td>
-                <td>{currBrand.brandEmailAddress.toString()}</td>
-                <td>{currBrand.warrantyPeriod.toString()}</td>
-                {/* <td>{currBrand.smartContractAddress.toString()}</td> */}
-              </tr>
-            ))}
-        </tbody>
-      </ReactBootstrap.Table>
+    <div className="fullbox">
+      <div className="table-container">
+        {console.log(brandsBalance)}
+        <ReactBootstrap.Table>
+          <thead>
+            <tr>
+              <th>BRAND ID</th>
+              <th>BRAND ADDRESS</th>
+              <th>BRAND NAME</th>
+              <th>BRAND EMAIL</th>
+              <th>WARRANTY LEFT</th>
+            </tr>
+          </thead>
+          <tbody>
+            {brandsArr.length &&
+              brandsArr.map((currBrand) => (
+                <tr key={currBrand.brandID.toString()}>
+                  <td>{currBrand.brandID.toString()}</td>
+                  <td>{currBrand.brandAddress.toString()}</td>
+                  <td>{currBrand.brandName.toString()}</td>
+                  <td>{currBrand.brandEmailAddress.toString()}</td>
+                  <td>{currBrand.warrantyPeriod.toString()}</td>
+                  {/* <td>{currBrand.smartContractAddress.toString()}</td> */}
+                </tr>
+              ))}
+          </tbody>
+        </ReactBootstrap.Table>
 
-      <button
-        style={{ width: "15%", padding: "12px 32px 12px 25px" }}
-        onClick={async () => {
-          await withdraw({
-            onSuccess: handleSuccess,
-            onError: (error) => console.log(error),
-          });
-        }}
-      >
-        {isLoading || isFetching ? (
-          <Spinner animation="grow" variant="dark" size="sm" />
-        ) : (
-          "Withdraw"
-        )}
-      </button>
+        <button
+          style={{ width: "15%", padding: "12px 32px 12px 25px" }}
+          onClick={async () => {
+            await withdraw({
+              onSuccess: handleSuccess,
+              onError: (error) => console.log(error),
+            });
+          }}
+        >
+          {isLoading || isFetching ? (
+            <Spinner animation="grow" variant="dark" size="sm" />
+          ) : (
+            "Withdraw"
+          )}
+        </button>
+      </div>
     </div>
   );
 }

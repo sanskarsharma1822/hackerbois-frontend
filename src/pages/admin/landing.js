@@ -4,6 +4,7 @@ import ViewTable from "./viewTable";
 import "./admin.css";
 import { useState, useEffect } from "react";
 import { useMoralis, useWeb3Contract } from "react-moralis";
+import Notauthorized from "./notauthorized";
 
 //-------------------------------------------------------------
 import {
@@ -49,7 +50,7 @@ function Admin() {
         account == adminAccount ? (
           <ViewTable />
         ) : (
-          <h1>You are not authorised🚷 </h1>
+          <Notauthorized />
         )
       ) : (
         <h1>Connect Wallet</h1>

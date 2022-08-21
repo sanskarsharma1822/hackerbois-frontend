@@ -4,6 +4,7 @@ import "./brand.css";
 import axios from "axios";
 import AddProduct from "./addProduct.js";
 import console from "console-browserify";
+import "../../App.css";
 
 //------------------------------------------------------
 import { useMoralis, useWeb3Contract } from "react-moralis";
@@ -214,117 +215,120 @@ function Warehouse({ brandIndex, brandId }) {
 
   return (
     //add new product btn
-    <div className="warehouse">
-      {/* {console.log(brandIndex)} */}
-      {/* {console.log(brandAddress)} */}
-      {/* {console.log(numOfTokens)} */}
-      {/* {console.log(finalArr)} */}
-      {/* {console.log(numOfTokens)} */}
-      <h1
-        style={{
-          fontSize: "4.5rem",
-          fontWeight: "bold",
-          paddingBottom: "3rem",
-        }}
-      >
-        Welcome to Warehouse
-      </h1>
-      <hr
-        style={{
-          boxShadow: "5px 10px 25px rgba(145, 92, 182, 15.5)",
-          height: "5px",
-          fontWeight: "bold",
-          backgroundColor: "rgb(25,25,25)",
-          alignSelf: "center",
-          marginBottom: "5rem",
-        }}
-      ></hr>
+    <div className="fullbox">
+      <div className="warehouse">
+        {/* {console.log(brandIndex)} */}
+        {/* {console.log(brandAddress)} */}
+        {/* {console.log(numOfTokens)} */}
+        {/* {console.log(finalArr)} */}
+        {/* {console.log(numOfTokens)} */}
+        <h1
+          style={{
+            fontSize: "4.5rem",
+            fontWeight: "bold",
+            paddingBottom: "3rem",
+          }}
+        >
+          Welcome to Warehouse
+        </h1>
+        <hr
+          style={{
+            boxShadow: "5px 10px 25px rgba(145, 92, 182, 15.5)",
+            height: "5px",
+            fontWeight: "bold",
+            backgroundColor: "rgb(25,25,25)",
+            alignSelf: "center",
+            marginBottom: "5rem",
+          }}
+        ></hr>
 
-      <section className="head">
-        <div>
-          <button
-            onClick={() => (showForm ? setShowForm(false) : setShowForm(true))}
-          >
-            Add New Product
-          </button>
-        </div>
-        <div>
+        <section className="head">
           <div>
-            <label htmlfor="pack">
-              <h4>Extend Contract By : </h4>
-            </label>
-            <select
-              id="pack"
-              name="pack"
-              onChange={(e) => setWarrantyAdded(e.target.value)}
-              value={warrantyAdded}
-              required
-            >
-              <option value="1">30 Days</option>
-              <option value="2">60 Days</option>
-              <option value="3">90 Days</option>
-            </select>
             <button
-              id="extendButton"
-              onClick={async () => {
-                await extendWarranty({
-                  onSuccess: () => console.log("success"),
-                  onError: (error) => console.log(error),
-                });
+              onClick={() =>
+                showForm ? setShowForm(false) : setShowForm(true)
+              }
+            >
+              Add New Product
+            </button>
+          </div>
+          <div>
+            <div>
+              <label htmlfor="pack">
+                <h4>Extend Contract By : </h4>
+              </label>
+              <select
+                id="pack"
+                name="pack"
+                onChange={(e) => setWarrantyAdded(e.target.value)}
+                value={warrantyAdded}
+                required
+              >
+                <option value="1">30 Days</option>
+                <option value="2">60 Days</option>
+                <option value="3">90 Days</option>
+              </select>
+              <button
+                id="extendButton"
+                onClick={async () => {
+                  await extendWarranty({
+                    onSuccess: () => console.log("success"),
+                    onError: (error) => console.log(error),
+                  });
+                }}
+              >
+                Extend Warranty
+              </button>
+              <br></br>
+              <h6 style={{ marginRight: "40px" }}>
+                Contract left : {brandWarrantyLeft} days
+              </h6>
+            </div>
+          </div>
+        </section>
+        <section>
+          {showForm ? (
+            // <AddProduct brandIndex={brandIndex} />
+            <AddProduct
+              brandIndex={brandIndex}
+              brandAddress={brandAddress}
+              updateTokenCount={updateNumberOfTokens}
+            />
+          ) : (
+            <h1
+              style={{
+                paddingTop: "3rem",
+                fontSize: "3.5rem",
+                paddingBottom: "2.5rem",
               }}
             >
-              Extend Warranty
-            </button>
-            <br></br>
-            <h6 style={{ marginRight: "40px" }}>
-              Contract left : {brandWarrantyLeft} days
-            </h6>
+              Your Products
+            </h1>
+          )}
+          <div className="cards-outer">
+            <section className="cards">
+              {numOfTokens !== "0" &&
+                finalArr.length !== 0 &&
+                finalArr.map((one) => {
+                  return (
+                    <Product
+                      key={one.tokenId}
+                      tokenId={one.tokenId}
+                      brandIndex={brandIndex}
+                      brandId={brandId}
+                      brandAddress={brandAddress}
+                      name={one.name}
+                      image={one.image}
+                      serialNumber={one.serialNumber}
+                      productLink={one.productLink}
+                      description={one.description}
+                      price={one.price}
+                    />
+                  );
+                })}
+            </section>
           </div>
-        </div>
-      </section>
-      <section>
-        {showForm ? (
-          // <AddProduct brandIndex={brandIndex} />
-          <AddProduct
-            brandIndex={brandIndex}
-            brandAddress={brandAddress}
-            updateTokenCount={updateNumberOfTokens}
-          />
-        ) : (
-          <h1
-            style={{
-              paddingTop: "3rem",
-              fontSize: "3.5rem",
-              paddingBottom: "2.5rem",
-            }}
-          >
-            Your Products
-          </h1>
-        )}
-        <div className="cards-outer">
-          <section className="cards">
-            {numOfTokens !== "0" &&
-              finalArr.length !== 0 &&
-              finalArr.map((one) => {
-                return (
-                  <Product
-                    key={one.tokenId}
-                    tokenId={one.tokenId}
-                    brandIndex={brandIndex}
-                    brandId={brandId}
-                    brandAddress={brandAddress}
-                    name={one.name}
-                    image={one.image}
-                    serialNumber={one.serialNumber}
-                    productLink={one.productLink}
-                    description={one.description}
-                    price={one.price}
-                  />
-                );
-              })}
-          </section>
-        </div>
-        {/* <section className="cards">
+          {/* <section className="cards">
             <Product
               key={1}
               title={"title"}
@@ -367,7 +371,7 @@ function Warehouse({ brandIndex, brandId }) {
             />
           </section>
           <div> */}
-        {/* <h1>Cards</h1>
+          {/* <h1>Cards</h1>
             {numOfTokens !== "0" &&
               finalArr.length !== 0 &&
               finalArr.map((one) => {
@@ -382,9 +386,10 @@ function Warehouse({ brandIndex, brandId }) {
                   />
                 );
               })} */}
-        {/* </div> */}
-        {/* </div> */}
-      </section>
+          {/* </div> */}
+          {/* </div> */}
+        </section>
+      </div>
     </div>
   );
 }
