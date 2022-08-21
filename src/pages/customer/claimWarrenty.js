@@ -95,7 +95,7 @@ function ClaimWarrenty({ brandIndex, brandAddress, tokenId }) {
     async function updateHistory() {
       await setHistory({
         onSuccess: handleSuccess,
-        onError: handleErrorNotification,
+        onError: (e) => console.log(e),
       });
     }
     if (ipfsReturn !== "") {
