@@ -6,18 +6,18 @@ body {
   height: 100% !important;
   margin-top: 13.5rem;
   background: url("../public/background1.png") repeat 0 0;
-  -webkit-animation: bg-scrolling-reverse 60s infinite;
+  /* -webkit-animation: bg-scrolling-reverse 60s infinite; */
   /* Safari 4+ */
-  -moz-animation: bg-scrolling-reverse 60s infinite;
+  /* -moz-animation: bg-scrolling-reverse 60s infinite; */
   /* Fx 5+ */
-  -o-animation: bg-scrolling-reverse 60s infinite;
+  /* -o-animation: bg-scrolling-reverse 60s infinite; */
   /* Opera 12+ */
-  animation: bg-scrolling-reverse 60s infinite;
+  /* animation: bg-scrolling-reverse 60s infinite; */
   /* IE 10+ */
-  -webkit-animation-timing-function: linear;
-  -moz-animation-timing-function: linear;
-  -o-animation-timing-function: linear;
-  animation-timing-function: linear;
+  /* -webkit-animation-timing-function: linear; */
+  /* -moz-animation-timing-function: linear; */
+  /* -o-animation-timing-function: linear; */
+  /* animation-timing-function: linear; */
 }
 
 #root {
@@ -49,9 +49,9 @@ nav {
   min-height: 8vh;
   justify-content: space-evenly;
   padding: 2%;
-  padding-bottom: 0;
+  padding-bottom: 1%;
   font-size: 1.5em;
-  margin-bottom: 1%;
+  margin-bottom: 2%;
   font-weight: 600;
   z-index: 5;
 }
@@ -60,11 +60,20 @@ nav a {
 }
 
 .navheaders {
+  /* box-shadow: inset 0 0 0 0 #54b3d6; */
   color: black;
+  padding: 0 0.25rem;
+  margin: 0 -0.25rem;
+  /* transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out; */
 }
 
 .navheaders:hover {
-  color: rgb(107, 107, 107);
+  /* color: rgb(107, 107, 107); */
+  /* background-color: white;
+  border-radius: 50%;
+  color: black; */
+  /* box-shadow: inset 110px 0 0 0 black; */
+  color: white;
 }
 
 button {
@@ -287,11 +296,11 @@ button:hover {
   }
 }
 
-.fullbox {
+/* .fullbox {
   height: 85vh;
   width: 95vw;
   /* width : 45w; */
-  margin: auto;
+/* margin: auto;
   border-radius: 2%;
-  background-color: rgb(255, 255, 255, 0.3);
-}
+  background-color: rgb(255, 255, 255, 0.3); */
+/* }  */
